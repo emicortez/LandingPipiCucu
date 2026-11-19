@@ -1,0 +1,11 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import {getSettings} from '../lib/content';
+interface Props { title?:string; description?:string; }
+const {title='Pipí Cucú | Pintura decorativa',description='Pintura decorativa y obras hechas a mano en Buena Esperanza, San Luis.'}=Astro.props;
+const settings=await getSettings();
+---
+<!doctype html><html lang="es-AR"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#f8f5f1"/><meta name="description" content={description}/><title>{title}</title><link rel="icon" type="image/webp" href="/images/logo-original.webp"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet"/></head>
+<body><a class="skip-link" href="#main">Saltar al contenido</a><Header settings={settings}/><main id="main"><slot /></main><Footer settings={settings}/><script is:inline>const toggle=document.querySelector('#menu-toggle'),nav=document.querySelector('#main-nav');if(toggle&&nav){toggle.addEventListener('click',()=>{const open=nav.classList.toggle('open');toggle.setAttribute('aria-expanded',String(open));toggle.textContent=open?'×':'☰'});nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');toggle.setAttribute('aria-expanded','false');toggle.textContent='☰'}));}if('IntersectionObserver'in window && !matchMedia('(prefers-reduced-motion: reduce)').matches){const ob=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ob.unobserve(e.target)}}),{threshold:.08});document.querySelectorAll('.show-up').forEach(el=>ob.observe(el));}else{document.querySelectorAll('.show-up').forEach(el=>el.classList.add('visible'));}</script></body></html>

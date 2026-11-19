@@ -1,0 +1,1 @@
+import {artwork} from './artwork';import {category} from './category';import {news} from './news';import {siteSettings} from './siteSettings';export const schemaTypes=[artwork,category,news,siteSettings];

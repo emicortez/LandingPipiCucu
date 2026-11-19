@@ -1,0 +1,4 @@
+---
+import type {Work} from '../data/demo'; const {work}=Astro.props as {work:Work};
+---
+<article class="art-card" data-category={work.category} data-search={`${work.title} ${work.category}`.toLowerCase()}><a class="product-card-link" href={`/productos/${work.slug}/`} aria-label={`Ver obra ${work.title}`}><div class="art-img"><img src={work.image || '/images/mariposa.webp'} alt={work.title} loading="lazy"/></div><div class="art-foot"><div><h3>{work.title}</h3><small>{work.category || 'Pintura decorativa'}</small></div><span class="circle" aria-hidden="true">↗</span></div></a></article>

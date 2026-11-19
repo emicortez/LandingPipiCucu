@@ -1,0 +1,9 @@
+---
+import WorkCard from './WorkCard.astro';import type {Work} from '../data/demo';const {works,showFilters=false}=Astro.props as {works:Work[],showFilters?:boolean};
+const categories=[...new Set(works.map(x=>x.category).filter(Boolean))];
+---
+<div data-catalog>
+ {showFilters && <div class="catalog-tools"><div class="filters" aria-label="Filtrar obras"><button type="button" class="filter active" data-filter="Todas" aria-pressed="true">Todas</button>{categories.map(c=><button type="button" class="filter" data-filter={c} aria-pressed="false">{c}</button>)}</div><label><span class="sr-only">Buscar obras</span><input class="product-search" type="search" data-search-input placeholder="Buscar obra o categoría..." aria-label="Buscar obras"/></label></div>}
+ <div class="gallery-grid">{works.map(work=><WorkCard work={work}/>)}</div><p data-empty hidden class="notice">No encontramos obras con esos filtros.</p>
+</div>
+<script>document.querySelectorAll('[data-catalog]').forEach(catalog=>{let filter='Todas',term='';const buttons=catalog.querySelectorAll<HTMLButtonElement>('[data-filter]');const search=catalog.querySelector<HTMLInputElement>('[data-search-input]');function update(){let visible=0;catalog.querySelectorAll<HTMLElement>('.art-card').forEach(card=>{const show=(filter==='Todas'||card.dataset.category===filter)&&(!term||(card.dataset.search||'').includes(term));card.hidden=!show;if(show)visible++;});const empty=catalog.querySelector<HTMLElement>('[data-empty]');if(empty)empty.hidden=visible!==0;}buttons.forEach(btn=>btn.addEventListener('click',()=>{filter=btn.dataset.filter||'Todas';buttons.forEach(b=>{const on=b===btn;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on));});update();}));search?.addEventListener('input',()=>{term=search.value.trim().toLocaleLowerCase('es');update();});});</script>

@@ -1,0 +1,4 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';import WorkGrid from '../../components/WorkGrid.astro';import {getWorks,usingDemo} from '../../lib/content';const works=await getWorks();
+---
+<SiteLayout title="Catálogo de obras | Pipí Cucú"><section class="page-intro"><div class="wrap"><span class="eyebrow muted">Pipí Cucú / Catálogo visual</span><h1>Nuestras <em>obras.</em></h1><p>Un espacio para descubrir nuestras creaciones. Explorá pinturas, detalles y piezas hechas a mano. Las compras se finalizan en la tienda externa.</p>{usingDemo && <p class="notice">Catálogo de ejemplo basado en las fotos recibidas. Los nombres y categorías son orientativos; el inventario comercial se administra por separado en Empretienda.</p>}</div></section><section class="section-pad" style="padding-top:30px"><div class="wrap"><WorkGrid works={works} showFilters={true}/></div></section></SiteLayout>

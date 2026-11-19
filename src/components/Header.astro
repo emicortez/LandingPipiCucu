@@ -1,0 +1,5 @@
+---
+import type {Settings} from '../data/demo';
+const {settings}=Astro.props as {settings:Settings};
+---
+<header class="header"><div class="wrap headinner"><a class="brand" href="/" aria-label="Pipí Cucú, inicio"><img src={settings.logoUrl} alt="Pipí Cucú" width="83" height="60"/></a><button id="menu-toggle" class="menu-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">☰</button><nav class="nav" id="main-nav" aria-label="Navegación principal"><a href="/">Inicio</a><a href="/productos/">Obras</a><a href="/novedades/">Novedades</a><a href="/#nosotras">Nosotras</a><a href="/#personalizados">Personalizados</a><a class="pill" href={settings.storeUrl} target="_blank" rel="noopener noreferrer">Tienda online ↗</a></nav></div></header>
