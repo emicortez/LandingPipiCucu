@@ -19,43 +19,40 @@ const settings = await getSettings();
 const extra = (work.images || []).filter(Boolean);
 ---
 <SiteLayout title={`${work.title} | Pipí Cucú`} description={work.description}>
-  <article class="ficha field">
-    <div class="wrap">
-      <a class="back-link" href="/productos/"><Icon name="arrow-left" /> Volver al herbario</a>
-      <div class="ficha-grid">
-        <div>
-          <figure class="plate ficha-plate" style="margin:0">
-            <div class="mount">
-              <div class="window">
-                <span class="photo" style={`view-transition-name: ${plateTransitionName(work.slug)}`}><img src={work.image} alt={work.description || work.title} fetchpriority="high" decoding="async" /></span>
-              </div>
-            </div>
-          </figure>
-          {extra.length > 0 && (
-            <div class="extra-views">
-              {extra.map((img, i) => (
-                <figure class="plate" style="margin:0">
-                  <div class="mount"><div class="window"><span class="photo"><img src={img} alt={`${work.title}, vista ${i + 2}`} loading="lazy" decoding="async" /></span></div></div>
-                </figure>
-              ))}
-            </div>
-          )}
-        </div>
-        <div class="ficha-side">
-          <h1>{work.title}</h1>
-          <SpecimenLabel work={work} number={number} showTitle={false} class="ficha-label" />
-          {work.description && <p class="ficha-desc">{work.description}</p>}
-          {usingDemo && <p class="demo-note">Ficha ilustrativa. Confirmá precio y disponibilidad en la tienda.</p>}
-          <a class="btn btn-ink" href={shopLink(work, settings)} target="_blank" rel="noopener noreferrer">{work.externalUrl ? 'Ver esta obra en la tienda' : 'Ir a la tienda'} <Icon name="arrow-up-right" /><span class="sr-only">(abre en otra pestaña)</span></a>
-          <p class="ficha-fine">Precio, pago y envío se gestionan en Empretienda.</p>
-        </div>
+  <article class="ficha">
+    <div class="ficha-grid">
+      <div class="ficha-media field">
+        <figure class="plate ficha-plate">
+          <span class="photo" style={`view-transition-name: ${plateTransitionName(work.slug)}`}><img src={work.image} alt={work.description || work.title} fetchpriority="high" decoding="async" /></span>
+        </figure>
+        {extra.length > 0 && (
+          <div class="extra-views">
+            {extra.map((img, i) => (
+              <figure class="plate">
+                <span class="photo"><img src={img} alt={`${work.title}, vista ${i + 2}`} loading="lazy" decoding="async" /></span>
+              </figure>
+            ))}
+          </div>
+        )}
       </div>
-      {(prev || next) && (
-        <nav class="pager" aria-label="Otras láminas">
-          {prev && <a href={`/productos/${prev.slug}/`}><small>Lámina anterior</small><span>{prev.title}</span></a>}
-          {next && <a href={`/productos/${next.slug}/`}><small>Lámina siguiente</small><span>{next.title}</span></a>}
-        </nav>
-      )}
+      <div class="ficha-side">
+        <a class="back-link" href="/productos/"><Icon name="arrow-left" /> Volver al herbario</a>
+        <p class="ficha-num"><span class="sr-only">Obra número </span>{number}</p>
+        <h1>{work.title}</h1>
+        <SpecimenLabel work={work} number={number} detail class="ficha-label" />
+        {work.description && <p class="ficha-desc">{work.description}</p>}
+        {usingDemo && <p class="demo-note">Ficha ilustrativa. Confirmá precio y disponibilidad en la tienda.</p>}
+        <a class="btn btn-ink" href={shopLink(work, settings)} target="_blank" rel="noopener noreferrer">{work.externalUrl ? 'Ver esta obra en la tienda' : 'Ir a la tienda'} <Icon name="arrow-up-right" /><span class="sr-only">(abre en otra pestaña)</span></a>
+        <p class="ficha-fine">Precio, pago y envío se gestionan en Empretienda.</p>
+      </div>
     </div>
+    {(prev || next) && (
+      <div class="wrap">
+        <nav class="pager" aria-label="Otras obras">
+          {prev && <a href={`/productos/${prev.slug}/`}><small>Obra anterior</small><span>{prev.title}</span></a>}
+          {next && <a href={`/productos/${next.slug}/`}><small>Obra siguiente</small><span>{next.title}</span></a>}
+        </nav>
+      </div>
+    )}
   </article>
 </SiteLayout>

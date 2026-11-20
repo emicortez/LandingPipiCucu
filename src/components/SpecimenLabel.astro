@@ -9,9 +9,11 @@ interface Props {
   storeHref?: string;
   storeText?: string;
   showTitle?: boolean;
+  /** Full record (category, technique, measures) as a spec list, used on the ficha. */
+  detail?: boolean;
   class?: string;
 }
-const { work, number, heading = 'h3', href, storeHref, storeText = 'Ver en la tienda', showTitle = true, class: className } = Astro.props;
+const { work, number, heading = 'h3', href, storeHref, storeText = 'Ver en la tienda', showTitle = true, detail = false, class: className } = Astro.props;
 const Heading = heading;
 const rows = [
   { key: 'Categoría', value: work.category },
@@ -20,22 +22,29 @@ const rows = [
 ];
 ---
 <div class:list={['label', className]}>
-  <div class="label-head">
-    <p class="label-no"><span class="label-key">Nº</span><span class="label-num">{number}</span></p>
-    {showTitle ? (
-      <Heading class="label-title">{href ? <a href={href}>{work.title}</a> : work.title}</Heading>
-    ) : (
-      <p class="label-title">{work.title}</p>
-    )}
-  </div>
-  <dl class="label-data">
-    {rows.map((row) => (
-      <div>
-        <dt>{row.key}</dt>
-        <dd>{row.value ? row.value : <><span class="nodata" aria-hidden="true">—</span><span class="sr-only">Sin dato</span></>}</dd>
+  {!detail && (
+    <div class="label-head">
+      <p class="label-no"><span class="sr-only">Obra número </span><span class="label-num">{number}</span></p>
+      <div class="label-text">
+        {showTitle ? (
+          <Heading class="label-title">{href ? <a href={href}>{work.title}</a> : work.title}</Heading>
+        ) : (
+          <p class="label-title">{work.title}</p>
+        )}
+        {work.category && <p class="label-cat">{work.category}</p>}
       </div>
-    ))}
-  </dl>
+    </div>
+  )}
+  {detail && (
+    <dl class="label-data">
+      {rows.map((row) => (
+        <div>
+          <dt>{row.key}</dt>
+          <dd>{row.value ? row.value : <><span class="nodata" aria-hidden="true">—</span><span class="sr-only">Sin dato</span></>}</dd>
+        </div>
+      ))}
+    </dl>
+  )}
   {storeHref && (
     <div class="label-store-wrap">
       <div>

@@ -14,6 +14,7 @@ Product truth: `PRODUCT.md`. Direction contract: `.impeccable/surfaces/src-pages
 - S7: "crea unas animaciones lindas, con transiciones lindas q llamen la atencion pero no lo hagan tan pesada."
 - S8: "tenemos q tener una session admin donde pueda un usuario pueda agregar o sacar pinturas, cual pone el header" — agreed approach: Sanity Studio (existing `studio/`) is the admin; add a "Obra de portada" field to choose the hero artwork.
 - S9: "Y q los textos de la landing page pueda ser cambiados." — move the hardcoded landing texts into siteSettings, grouped by section; an empty field falls back to the current text.
+- S10: "bueno igual quiero q la pagina sea mas linda, mas moderna" — answers: what bothers: "Se ve antigua / álbum", "Le falta impacto"; concept: "Mantener y modernizar".
 
 ## Tasks
 
@@ -21,6 +22,7 @@ Product truth: `PRODUCT.md`. Direction contract: `.impeccable/surfaces/src-pages
 - T2 (S6): Run the dev server and hand the URL to the user. Route: parent. Status: done (http://localhost:4321/). Commit: n/a.
 - T3 (S7): Add attention-grabbing but lightweight animations and page transitions in the Herbario world (CSS-first, no new dependencies, reduced-motion safe). Route: worker. Status: done (build ok, detector 0, first-viewport ok at 1440/390/360). Commit: pending (not requested).
 - T4 (S8-S9): Sanity siteSettings: hero artwork reference + grouped editable landing texts with fallbacks; frontend reads them. Route: worker. Status: done (build ok, home HTML identical, merge check ok, studio tsc + sanity build ok; schema validate needs a real projectId). Commit: pending (not requested).
+- T5 (S10): Modernize the Herbario execution: drop album/retro cues, add bold large-scale impact; keep concept, palette, fonts, data, CMS fields, motion budget. Route: worker. Commit: pending.
 
 ## Log
 
@@ -30,3 +32,4 @@ Product truth: `PRODUCT.md`. Direction contract: `.impeccable/surfaces/src-pages
 - L4: Direction round answer: assigned (Herbario de láminas), buildPath code.
 - L6: User approved Sanity Studio as admin (free plan) and: "bien me parece perfecto. Arranca con el 1 y el 2" (1 = hero artwork field, 2 = editable landing texts).
 - L5: "crea unas animaciones lindas, con transiciones lindas q llamen la atencion pero no lo hagan tan pesada."
+- L7: "bueno igual quiero q la pagina sea mas linda, mas moderna"; answers: "Se ve antigua / álbum" + "Le falta impacto"; "Mantener y modernizar".

@@ -29,7 +29,7 @@ const dateFmt = new Intl.DateTimeFormat('es-AR', { day: 'numeric', month: 'long'
             <li class="news-item">
               <a href={`/novedades/${n.slug}/`}>
                 <span class="news-meta">{n.publishedAt ? <time datetime={n.publishedAt}>{dateFmt.format(new Date(n.publishedAt))}</time> : <span class="news-date">Novedad</span>}</span>
-                <div><h2 style="font-size:clamp(1.4rem,2.6vw,2rem)">{n.title}</h2>{n.excerpt && <p>{n.excerpt}</p>}</div>
+                <div><h2>{n.title}</h2>{n.excerpt && <p>{n.excerpt}</p>}</div>
                 <Icon name="arrow-right" />
               </a>
             </li>

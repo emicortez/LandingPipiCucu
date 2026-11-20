@@ -5,15 +5,15 @@ import { getWorks, getSettings, usingDemo } from '../../lib/content';
 const [works, settings] = await Promise.all([getWorks(), getSettings()]);
 ---
 <SiteLayout title="Catálogo de obras | Pipí Cucú" description="Todas las obras de Pipí Cucú, pintadas a mano por Deby y Agos. Filtrá por categoría o buscá una obra.">
-  <div class="field">
-    <section class="page-intro" aria-labelledby="catalog-title">
+  <div class="board">
+    <section class="page-intro field" aria-labelledby="catalog-title">
       <div class="wrap">
         <h1 id="catalog-title">El <em>herbario</em> de obras</h1>
-        <p class="lede">Cada obra, montada como una lámina. Abrí la que te guste para ver su ficha completa; la compra se hace en nuestra tienda.</p>
+        <p class="lede">Cada obra lleva su número en la colección. Abrí la que te guste para ver su ficha completa; la compra se hace en nuestra tienda.</p>
         {usingDemo && <p class="demo-note">Catálogo de ejemplo con las fotos recibidas. Los nombres y categorías son orientativos; el inventario comercial está en Empretienda.</p>}
       </div>
     </section>
-    <section class="section" style="padding-top:0" aria-label="Obras">
+    <section class="section catalog" aria-label="Obras">
       <div class="wrap">
         <WorkGrid works={works} settings={settings} showFilters={true} />
       </div>

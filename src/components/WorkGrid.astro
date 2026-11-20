@@ -19,7 +19,7 @@ const categories = [...new Set(works.map((w) => w.category).filter(Boolean))];
           <input type="search" data-search-input placeholder="Título o categoría" autocomplete="off" />
         </label>
       </div>
-      <p class="catalog-status" data-status aria-live="polite">{works.length} {works.length === 1 ? 'lámina' : 'láminas'} en el herbario.</p>
+      <p class="catalog-status" data-status aria-live="polite">{works.length} {works.length === 1 ? 'obra' : 'obras'} en la colección.</p>
     </>
   )}
   <div class:list={['plates', className]}>
@@ -27,7 +27,7 @@ const categories = [...new Set(works.map((w) => w.category).filter(Boolean))];
   </div>
   {showFilters && (
     <div class="empty" data-empty hidden>
-      <h2>No hay láminas con esa búsqueda.</h2>
+      <h2>No hay obras con esa búsqueda.</h2>
       <p>Probá con otra palabra o volvé a ver todas las obras.</p>
       <button type="button" class="btn btn-ink" data-reset>Ver todas las obras</button>
     </div>
@@ -43,12 +43,12 @@ const categories = [...new Set(works.map((w) => w.category).filter(Boolean))];
     const calm = matchMedia('(prefers-reduced-motion: reduce)');
     let filter = 'Todas';
     let term = '';
-    // Plates that (re)appear settle onto the board instead of popping in.
+    // Works that (re)appear rise into place instead of popping in.
     function settle(plate: HTMLElement, order: number) {
       plate.classList.remove('reveal', 'is-in');
       plate.getAnimations().forEach((a) => a.cancel());
       plate.animate(
-        [{ opacity: 0, transform: 'translateY(14px) rotate(-0.6deg)' }, { opacity: 1, transform: 'none' }],
+        [{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'none' }],
         { duration: 420, delay: Math.min(order, 8) * 40, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'backwards' },
       );
     }
@@ -62,7 +62,7 @@ const categories = [...new Set(works.map((w) => w.category).filter(Boolean))];
         if (show) visible++;
       });
       if (empty) empty.hidden = visible !== 0;
-      if (status) status.textContent = visible === 0 ? 'Ninguna lámina coincide.' : `${visible} ${visible === 1 ? 'lámina' : 'láminas'} en el herbario.`;
+      if (status) status.textContent = visible === 0 ? 'Ninguna obra coincide.' : `${visible} ${visible === 1 ? 'obra' : 'obras'} en la colección.`;
     }
     function select(value: string) {
       filter = value;

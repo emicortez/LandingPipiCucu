@@ -14,12 +14,12 @@ const dateFmt = new Intl.DateTimeFormat('es-AR', { day: 'numeric', month: 'long'
   <article class="page-intro board">
     <div class="wrap article">
       <a class="back-link" href="/novedades/"><Icon name="arrow-left" /> Novedades</a>
-      {news.publishedAt && <p class="news-item"><time datetime={news.publishedAt}>{dateFmt.format(new Date(news.publishedAt))}</time></p>}
+      {news.publishedAt && <p class="article-date"><time datetime={news.publishedAt}>{dateFmt.format(new Date(news.publishedAt))}</time></p>}
       <h1>{news.title}</h1>
       {news.excerpt && <p class="lede">{news.excerpt}</p>}
       {news.image && (
         <figure class="plate article-figure">
-          <div class="mount"><div class="window"><span class="photo"><img src={news.image} alt={news.title} decoding="async" /></span></div></div>
+          <span class="photo"><img src={news.image} alt={news.title} decoding="async" /></span>
         </figure>
       )}
       {news.body && <p class="article-body">{news.body}</p>}

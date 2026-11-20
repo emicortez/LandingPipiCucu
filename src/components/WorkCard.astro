@@ -9,10 +9,8 @@ const href = `/productos/${work.slug}/`;
 ---
 <article class="plate plate-card" data-category={work.category} data-search={`${work.title} ${work.category} ${work.technique ?? ''}`.toLocaleLowerCase('es')}>
   <a class="mount-link" href={href} tabindex="-1" aria-hidden="true">
-    <div class="mount">
-      <div class="window">
-        <span class="photo" style={`view-transition-name: ${plateTransitionName(work.slug)}`}><img src={work.image || '/images/mariposa.webp'} alt={work.description || work.title} loading="lazy" decoding="async" /></span>
-      </div>
+    <div class="window">
+      <span class="photo" style={`view-transition-name: ${plateTransitionName(work.slug)}`}><img src={work.image || '/images/mariposa.webp'} alt={work.description || work.title} loading="lazy" decoding="async" /></span>
     </div>
   </a>
   <SpecimenLabel work={work} number={number} heading="h3" href={href} storeHref={shopLink(work, settings)} />
