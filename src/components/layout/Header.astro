@@ -12,9 +12,9 @@ const current = (href: string) => (path === href || (href !== '/' && path.starts
 ---
 <header class="site-header" data-site-header style={tone === 'brand' ? '--header-bg: var(--surface-brand)' : undefined}>
   <div class="wrap header-bar">
-    <a class="brand" href="/" aria-label={`${settings.brandName}, inicio`}>
+    <a class="brand" href="/">
       <Image src={monogram} alt="" width={44} height={Math.round(44 * monogram.height / monogram.width)} loading="eager" />
-      <span class="brand-name" aria-hidden="true"><strong>{settings.brandName}</strong><span>{settings.descriptor}</span></span>
+      <span class="brand-name"><strong>{settings.brandName}</strong><span>{settings.descriptor}<span class="sr-only">, inicio</span></span></span>
     </a>
     <nav aria-label="Principal">
       <ul class="nav-list">
@@ -28,7 +28,7 @@ const current = (href: string) => (path === href || (href !== '/' && path.starts
   </div>
   <dialog class="menu-dialog on-ink" id="menu-dialog" aria-label="Menú">
     <div class="wrap menu-top">
-      <a class="brand" href="/" aria-label={`${settings.brandName}, inicio`}><span class="brand-name" aria-hidden="true"><strong>{settings.brandName}</strong></span></a>
+      <a class="brand" href="/"><span class="brand-name"><strong>{settings.brandName}</strong><span class="sr-only">, inicio</span></span></a>
       <button class="menu-button" type="button" data-menu-close><Icon name="close" /> Cerrar</button>
     </div>
     <nav class="wrap" aria-label="Principal (móvil)">
