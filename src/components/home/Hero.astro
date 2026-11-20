@@ -9,7 +9,7 @@ const { home, settings, work } = Astro.props;
 <section class="hero band--brand" aria-labelledby="hero-title">
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <h1 id="hero-title" class="t-display" data-hero-line>{home.heroTitle}</h1>
+      <h1 id="hero-title" class="t-display">{home.heroTitle}</h1>
       <p class="lede hero-lede" data-hero-fade>{home.heroDescription}</p>
       <div class="actions" data-hero-fade>
         <a class="btn" href="/productos/">Ver el catálogo <Icon name="arrow-right" /></a>

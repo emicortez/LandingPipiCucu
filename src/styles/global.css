@@ -251,9 +251,9 @@ button, input, select { font: inherit; color: inherit; }
 /* ---------- Motion bootstrap ---------- */
 /* Hidden states exist only while html.motion-pending is set by the head script; a
    failure removes the class after a timeout, so content is never stuck invisible. */
-html.motion-pending [data-hero-line] { visibility: hidden; }
 html.motion-pending [data-hero-fade] { opacity: 0; }
-html.motion-pending [data-hero-art] { clip-path: inset(100% 0 0 0); }
+/* Only from 64rem, where the headline (not the photo) is the LCP element. */
+@media (min-width: 64rem) { html.motion-pending [data-hero-art] { clip-path: inset(100% 0 0 0); } }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
