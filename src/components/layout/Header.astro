@@ -1,30 +1,67 @@
 ---
-import Icon from './Icon.astro';
-import type { Settings } from '../data/demo';
-interface Props { settings: Settings; }
-const { settings } = Astro.props;
+import { Image } from 'astro:assets';
+import Icon from '../ui/Icon.astro';
+import monogram from '../../assets/brand/monogram-ink.png';
+import type { SiteSettings } from '../../types/content';
+import { navLinks } from '../../lib/navigation';
+
+interface Props { settings: SiteSettings; tone?: 'surface' | 'brand'; }
+const { settings, tone = 'surface' } = Astro.props;
 const path = Astro.url.pathname;
-const links = [
-  { href: '/productos/', label: 'Obras' },
-  { href: '/#nosotras', label: 'Nosotras' },
-  { href: '/#personalizados', label: 'Personalizados' },
-  { href: '/novedades/', label: 'Novedades' },
-];
+const current = (href: string) => (path === href || (href !== '/' && path.startsWith(href)) ? 'page' : undefined);
 ---
-<header class="site-header field">
-  <div class="wrap bar">
-    <a class="wordmark" href="/" aria-label="Pipí Cucú, pintura decorativa. Inicio">
-      <span class="wordmark-pc" aria-hidden="true">PC.</span>
-      <span class="wordmark-text" aria-hidden="true"><span>Pipí Cucú</span><span>Pintura decorativa</span></span>
+<header class="site-header" data-site-header style={tone === 'brand' ? '--header-bg: var(--surface-brand)' : undefined}>
+  <div class="wrap header-bar">
+    <a class="brand" href="/" aria-label={`${settings.brandName}, inicio`}>
+      <Image src={monogram} alt="" width={44} height={Math.round(44 * monogram.height / monogram.width)} loading="eager" />
+      <span class="brand-name" aria-hidden="true"><strong>{settings.brandName}</strong><span>{settings.descriptor}</span></span>
     </a>
-    <button id="menu-toggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">
-      <span class="sr-only">Menú</span>
-      <Icon name="menu" />
-      <Icon name="close" />
-    </button>
-    <nav class="nav" id="main-nav" aria-label="Principal">
-      {links.map((l) => <a href={l.href} aria-current={!l.href.includes('#') && path.startsWith(l.href) ? 'page' : undefined}>{l.label}</a>)}
-      <a class="btn btn-ink" href={settings.storeUrl} target="_blank" rel="noopener noreferrer">{settings.storeButtonLabel} <Icon name="arrow-up-right" /><span class="sr-only">(abre en otra pestaña)</span></a>
+    <nav aria-label="Principal">
+      <ul class="nav-list">
+        {navLinks.map((l) => <li><a href={l.href} aria-current={current(l.href)}>{l.label}</a></li>)}
+        <li><a class="btn" href={settings.storeUrl} rel="noopener" target="_blank" data-track="store_click" data-track-label="header">Tienda online <Icon name="arrow-up-right" /><span class="sr-only">(se abre en otra pestaña)</span></a></li>
+      </ul>
     </nav>
+    <button class="menu-button" type="button" aria-haspopup="dialog" aria-controls="menu-dialog" data-menu-open>
+      <Icon name="menu" /> Menú
+    </button>
   </div>
+  <dialog class="menu-dialog on-ink" id="menu-dialog" aria-label="Menú">
+    <div class="wrap menu-top">
+      <a class="brand" href="/" aria-label={`${settings.brandName}, inicio`}><span class="brand-name" aria-hidden="true"><strong>{settings.brandName}</strong></span></a>
+      <button class="menu-button" type="button" data-menu-close><Icon name="close" /> Cerrar</button>
+    </div>
+    <nav class="wrap" aria-label="Principal (móvil)">
+      <ul class="menu-links">
+        <li><a href="/" aria-current={path === '/' ? 'page' : undefined}>Inicio</a></li>
+        {navLinks.map((l) => <li><a href={l.href} aria-current={current(l.href)}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="wrap menu-foot">
+      <a class="btn" href={settings.storeUrl} rel="noopener" target="_blank" data-track="store_click" data-track-label="menu">Tienda online <Icon name="arrow-up-right" /><span class="sr-only">(se abre en otra pestaña)</span></a>
+      <a class="link" href={settings.instagramUrl} rel="noopener" target="_blank" data-track="instagram_click" data-track-label="menu"><Icon name="instagram" /> Instagram<span class="sr-only">(se abre en otra pestaña)</span></a>
+    </div>
+  </dialog>
 </header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-site-header]');
+  const dialog = document.querySelector<HTMLDialogElement>('#menu-dialog');
+  const opener = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+
+  opener?.addEventListener('click', () => dialog?.showModal());
+  dialog?.querySelector('[data-menu-close]')?.addEventListener('click', () => dialog.close());
+  dialog?.addEventListener('close', () => opener?.focus());
+  dialog?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => dialog.close()));
+  // Close if the viewport grows past the breakpoint where the inline nav shows.
+  matchMedia('(min-width: 64rem)').addEventListener('change', (e) => { if (e.matches) dialog?.close(); });
+
+  // Hairline under the header once the page has scrolled.
+  if (header) {
+    const sentinel = document.createElement('div');
+    sentinel.setAttribute('aria-hidden', 'true');
+    sentinel.style.cssText = 'position:absolute;top:0;height:1px;width:1px';
+    document.body.prepend(sentinel);
+    new IntersectionObserver(([entry]) => header.toggleAttribute('data-scrolled', !entry.isIntersecting)).observe(sentinel);
+  }
+</script>

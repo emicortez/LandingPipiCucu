@@ -1,41 +1,57 @@
 ---
-import SiteLayout from '../../layouts/SiteLayout.astro';
-import Icon from '../../components/Icon.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/layout/PageIntro.astro';
+import ArtworkImage from '../../components/ui/ArtworkImage.astro';
+import Icon from '../../components/ui/Icon.astro';
 import { getNews, getSettings } from '../../lib/content';
+import { formatDate } from '../../lib/format';
+import { breadcrumbList, type Crumb } from '../../lib/seo/jsonld';
+
 const [news, settings] = await Promise.all([getNews(), getSettings()]);
-const dateFmt = new Intl.DateTimeFormat('es-AR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const crumbs: Crumb[] = [{ name: 'Inicio', path: '/' }, { name: 'Novedades', path: '/novedades/' }];
+const site = (Astro.site ?? new URL('http://localhost:4321')).href;
 ---
-<SiteLayout title="Novedades | Pipí Cucú">
-  <section class="page-intro field" aria-labelledby="news-title">
+<BaseLayout
+  title="Novedades del taller"
+  description="Obras nuevas, anuncios y novedades de Pipí Cucú, taller de pintura decorativa en Buena Esperanza, San Luis."
+  headerTone="brand"
+  noindex={news.length === 0}
+  jsonLd={[breadcrumbList(crumbs, site)]}
+>
+  <PageIntro title="Novedades" lede="Obras nuevas, anuncios y lo que pasa en el taller." crumbs={crumbs} />
+  <section class="band" aria-label="Publicaciones">
     <div class="wrap">
-      <h1 id="news-title">Novedades del <em>taller</em></h1>
-      <p class="lede">Obras nuevas, noticias y anuncios de Pipí Cucú.</p>
-    </div>
-  </section>
-  <section class="section board">
-    <div class="wrap">
-      {news.length === 0 ? (
-        <div class="empty">
-          <h2>Todavía no hay novedades.</h2>
-          <p>Mientras tanto, mirá las obras o seguinos en Instagram para ver lo último que pintamos.</p>
-          <div class="actions">
-            <a class="btn btn-ink" href="/productos/">Ver las obras <Icon name="arrow-right" /></a>
-            <a class="btn btn-line" href={settings.instagramUrl} target="_blank" rel="noopener noreferrer"><Icon name="instagram" /> Instagram<span class="sr-only">(abre en otra pestaña)</span></a>
-          </div>
-        </div>
-      ) : (
-        <ul class="news-list">
+      {news.length > 0 ? (
+        <ul class="news-index">
           {news.map((n) => (
-            <li class="news-item">
-              <a href={`/novedades/${n.slug}/`}>
-                <span class="news-meta">{n.publishedAt ? <time datetime={n.publishedAt}>{dateFmt.format(new Date(n.publishedAt))}</time> : <span class="news-date">Novedad</span>}</span>
-                <div><h2>{n.title}</h2>{n.excerpt && <p>{n.excerpt}</p>}</div>
-                <Icon name="arrow-right" />
+            <li>
+              <a class="news-row art-link" href={`/novedades/${n.slug}/`}>
+                {n.cover && <ArtworkImage image={n.cover} alt="" sizes="(min-width: 48rem) 22rem, 100vw" />}
+                <div class="news-text">
+                  <time datetime={n.publishedAt}>{formatDate(n.publishedAt)}</time>
+                  <h2 class="t-3 art-title">{n.title}</h2>
+                  <p class="muted">{n.excerpt}</p>
+                </div>
               </a>
             </li>
           ))}
         </ul>
+      ) : (
+        <div class="news-empty">
+          <h2 class="t-2">Pronto vamos a publicar novedades acá</h2>
+          <p class="lede">Mientras tanto, lo último del taller está en nuestro Instagram.</p>
+          <a class="btn" href={settings.instagramUrl} rel="noopener" target="_blank" data-track="instagram_click" data-track-label="novedades-vacio"><Icon name="instagram" /> Ver Instagram<span class="sr-only">(se abre en otra pestaña)</span></a>
+        </div>
       )}
     </div>
   </section>
-</SiteLayout>
+</BaseLayout>
+
+<style>
+  .news-index { list-style: none; display: grid; border-top: 1px solid var(--line); }
+  .news-row { display: grid; gap: 1.25rem; padding-block: 2rem; border-bottom: 1px solid var(--line); }
+  .news-text { display: grid; gap: 0.6rem; align-content: start; max-width: 40rem; }
+  .news-text time { font-size: var(--step--1); color: var(--text-muted); }
+  .news-empty { display: grid; gap: 1.25rem; justify-items: start; max-width: 36rem; }
+  @media (min-width: 48rem) { .news-row { grid-template-columns: 22rem 1fr; column-gap: 3rem; } }
+</style>

@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/layout/PageIntro.astro';
+import Icon from '../components/ui/Icon.astro';
+import { getSettings } from '../lib/content';
+import { breadcrumbList, type Crumb } from '../lib/seo/jsonld';
+import { whatsappHref } from '../lib/urls';
+
+const settings = await getSettings();
+const whatsapp = whatsappHref(settings.whatsappNumber);
+const crumbs: Crumb[] = [{ name: 'Inicio', path: '/' }, { name: 'Contacto', path: '/contacto/' }];
+const site = (Astro.site ?? new URL('http://localhost:4321')).href;
+
+const channels = [
+  { title: 'Tienda online', text: 'Precios, disponibilidad, pagos y envíos.', href: settings.storeUrl, label: 'pipicucupc.empretienda.com.ar', track: 'store_click', icon: 'arrow-up-right' as const },
+  ...(whatsapp ? [{ title: 'WhatsApp', text: 'Consultas sobre obras y pedidos.', href: whatsapp, label: 'Escribinos', track: 'whatsapp_click', icon: 'whatsapp' as const }] : []),
+  { title: 'Instagram', text: 'Obras nuevas, procesos y mensajes privados.', href: settings.instagramUrl, label: '@pipicucu_pc', track: 'instagram_click', icon: 'instagram' as const },
+];
+---
+<BaseLayout
+  title="Contacto"
+  description={`Contactá a Pipí Cucú: tienda online, Instagram y consultas por obras personalizadas. ${settings.location}.`}
+  headerTone="brand"
+  jsonLd={[breadcrumbList(crumbs, site)]}
+>
+  <PageIntro title="Hablemos" lede="Para comprar, entrá a la tienda online. Para consultas o encargos, escribinos." crumbs={crumbs} />
+  <section class="band" aria-label="Canales de contacto">
+    <div class="wrap">
+      <ul class="channels">
+        {channels.map((c) => (
+          <li>
+            <h2 class="t-3">{c.title}</h2>
+            <p class="muted">{c.text}</p>
+            <a class="link" href={c.href} rel="noopener" target="_blank" data-track={c.track} data-track-label="contacto"><Icon name={c.icon} /> {c.label}<span class="sr-only">(se abre en otra pestaña)</span></a>
+          </li>
+        ))}
+        <li>
+          <h2 class="t-3">Dónde estamos</h2>
+          <p class="muted">Pintamos en {settings.location}. Los envíos se coordinan desde la tienda online.</p>
+          {settings.businessHours && <p>{settings.businessHours}</p>}
+        </li>
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .channels { list-style: none; display: grid; gap: 0; border-top: 1px solid var(--line); }
+  .channels li { display: grid; gap: 0.6rem; padding-block: 2rem; border-bottom: 1px solid var(--line); }
+  @media (min-width: 48rem) {
+    .channels li { grid-template-columns: 1fr 1.2fr auto; align-items: center; column-gap: 2rem; }
+  }
+</style>

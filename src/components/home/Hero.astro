@@ -1,0 +1,54 @@
+---
+import ArtworkImage from '../ui/ArtworkImage.astro';
+import Icon from '../ui/Icon.astro';
+import type { Artwork, HomePage, SiteSettings } from '../../types/content';
+
+interface Props { home: HomePage; settings: SiteSettings; work?: Artwork; }
+const { home, settings, work } = Astro.props;
+---
+<section class="hero band--brand" aria-labelledby="hero-title">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <h1 id="hero-title" class="t-display" data-hero-line>{home.heroTitle}</h1>
+      <p class="lede hero-lede" data-hero-fade>{home.heroDescription}</p>
+      <div class="actions" data-hero-fade>
+        <a class="btn" href="/productos/">Ver el catálogo <Icon name="arrow-right" /></a>
+        <a class="btn btn--line" href={settings.storeUrl} rel="noopener" target="_blank" data-track="store_click" data-track-label="hero">Tienda online <Icon name="arrow-up-right" /><span class="sr-only">(se abre en otra pestaña)</span></a>
+      </div>
+    </div>
+    {work && (
+      <a class="hero-art art-link" href={`/productos/${work.slug}/`} data-track="artwork_click" data-track-label={`hero:${work.slug}`}>
+        <ArtworkImage image={work.images[0]} sizes="(min-width: 64rem) 40vw, 100vw" priority data-hero-art />
+        <span class="hero-work" data-hero-fade>{work.title} <Icon name="arrow-right" /></span>
+      </a>
+    )}
+  </div>
+</section>
+
+<style>
+  .hero { padding-block: clamp(2rem, 4vw, 3.5rem) clamp(3rem, 6vw, 5rem); min-height: calc(100svh - var(--header-h)); display: flex; align-items: center; }
+  .hero-grid { display: grid; gap: 2.5rem; align-items: center; }
+  .hero-copy { display: grid; gap: clamp(1.25rem, 2.5vw, 2rem); }
+  .hero-copy h1 { max-width: 15ch; }
+  .hero-lede { max-width: 30rem; color: var(--color-ink); }
+  .hero-art { display: grid; justify-items: center; gap: 0.9rem; text-decoration: none; }
+  .hero-art :global(.art) { overflow: hidden; }
+  .hero-art :global(img) { width: auto; max-width: 100%; max-height: min(72svh, 52rem); }
+  .hero-work { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; font-size: var(--step--1); font-weight: 500; }
+  .hero-work :global(.icon) { width: 1rem; height: 1rem; transition: transform var(--dur) var(--ease-out); }
+  .hero-art:hover .hero-work :global(.icon) { transform: translateX(3px); }
+  @media (max-width: 39.99rem) {
+    .hero-copy .actions { display: grid; }
+    .hero-art :global(img) { max-height: 64svh; }
+  }
+  @media (min-width: 64rem) {
+    .hero-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 2rem; }
+    .hero-copy { grid-column: 1 / span 7; }
+    .hero-art { grid-column: 8 / span 5; }
+  }
+</style>
+
+<script>
+  import { playHeroEntrance } from '../../scripts/motion/hero';
+  playHeroEntrance();
+</script>

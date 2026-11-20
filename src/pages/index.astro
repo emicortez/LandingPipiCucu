@@ -1,107 +1,34 @@
 ---
-import SiteLayout from '../layouts/SiteLayout.astro';
-import WorkGrid from '../components/WorkGrid.astro';
-import SpecimenLabel from '../components/SpecimenLabel.astro';
-import Icon from '../components/Icon.astro';
-import Emphasis from '../components/Emphasis.astro';
-import { plateNumber } from '../components/plates';
-import { getWorks, getNews, getSettings, shopLink, usingDemo } from '../lib/content';
-const [works, news, settings] = await Promise.all([getWorks(), getNews(), getSettings()]);
-const featured = works.filter((w) => w.featured).slice(0, 6);
-const selections = featured.length ? featured : works.slice(0, 6);
-// "Obra de portada" from Sanity; a hidden or missing pick falls back to the first featured work, then the first work.
-const heroWork = (settings.heroArtworkSlug && works.find((w) => w.slug === settings.heroArtworkSlug)) || featured[0] || works[0];
-const customWork = works.find((w) => w.slug === 'fases-de-la-luna') ?? works.find((w) => w !== heroWork);
-const dateFmt = new Intl.DateTimeFormat('es-AR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import FeaturedWorks from '../components/home/FeaturedWorks.astro';
+import Collections from '../components/home/Collections.astro';
+import About from '../components/home/About.astro';
+import CustomOrders from '../components/home/CustomOrders.astro';
+import LatestNews from '../components/home/LatestNews.astro';
+import FinalCta from '../components/home/FinalCta.astro';
+import { getArtworks, getCategories, getHome, getNews, getSettings, pickFeatured } from '../lib/content';
+
+const [settings, home, works, categories, news] = await Promise.all([getSettings(), getHome(), getArtworks(), getCategories(), getNews()]);
+
+// Hero: the chosen work, else the first featured one, else the first in the catalog.
+const heroWork = works.find((w) => w.slug === home.heroArtworkSlug) ?? works.find((w) => w.featured) ?? works[0];
+const featured = pickFeatured(works.filter((w) => w !== heroWork), home.featuredArtworkSlugs, 4);
+
+const shownCategories = home.featuredCategorySlugs.length
+  ? home.featuredCategorySlugs.map((s) => categories.find((c) => c.slug === s)).filter((c) => c !== undefined)
+  : categories;
+const collectionItems = shownCategories.map((category) => {
+  const inCategory = works.filter((w) => w.category?.slug === category.slug);
+  return { category, count: inCategory.length, image: category.cover ?? inCategory[0]?.images[0] };
+});
 ---
-<SiteLayout title="Pipí Cucú — Pintura decorativa y obras hechas a mano">
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="hero-copy">
-      <h1 id="hero-title"><Emphasis text={settings.headline} lastWord /></h1>
-      <p class="hero-sub">{settings.subheadline}</p>
-      <div class="actions">
-        <a class="btn btn-ink" href="/productos/">{settings.heroPrimaryLabel} <Icon name="arrow-right" /></a>
-        <a class="btn btn-line" href={settings.storeUrl} target="_blank" rel="noopener noreferrer">{settings.storeButtonLabel} <Icon name="arrow-up-right" /><span class="sr-only">(abre en otra pestaña)</span></a>
-      </div>
-      <p class="hero-no">{settings.heroEyebrow}</p>
-    </div>
-    {heroWork && (
-      <figure class="plate hero-plate">
-        <span class="hero-num" aria-hidden="true">{plateNumber(works, heroWork)}</span>
-        <a class="mount-link hero-art" href={`/productos/${heroWork.slug}/`} tabindex="-1" aria-hidden="true">
-          <span class="photo"><img src={heroWork.image} alt={heroWork.description || heroWork.title} fetchpriority="high" decoding="async" /></span>
-        </a>
-        <figcaption>
-          <SpecimenLabel work={heroWork} number={plateNumber(works, heroWork)} heading="p" storeHref={shopLink(heroWork, settings)} storeText={settings.heroArtworkStoreLabel} />
-        </figcaption>
-      </figure>
-    )}
-  </section>
-
-  <section class="section board" id="obras" aria-labelledby="obras-title">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="obras-title"><Emphasis text={settings.selectionsTitle} /></h2>
-        <a class="text-link" href="/productos/">{settings.selectionsLinkLabel} <Icon name="arrow-right" /></a>
-      </div>
-      <WorkGrid works={selections} allWorks={works} settings={settings} class="plates-home" />
-    </div>
-  </section>
-
-  <section class="section story ink-block" id="nosotras" aria-labelledby="story-title">
-    <div class="wrap story-grid">
-      <h2 id="story-title"><Emphasis text={settings.storyTitle} /></h2>
-      <figure class="plate story-plate">
-        <img src="/images/founders-photo.webp" alt="Deby y Agos, madre e hija, sonriendo juntas al aire libre" width="390" height="816" loading="lazy" decoding="async" />
-      </figure>
-      <div class="story-copy">
-        <p>{settings.foundersText}</p>
-        <p>{settings.storyText}</p>
-        <a class="text-link" href={settings.instagramUrl} target="_blank" rel="noopener noreferrer"><Icon name="instagram" /> {settings.instagramLabel}<span class="sr-only">(abre en otra pestaña)</span></a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section custom field" id="personalizados" aria-labelledby="custom-title">
-    <div class="wrap custom-grid">
-      <div class="custom-copy">
-        <h2 id="custom-title"><Emphasis text={settings.customTitle} /></h2>
-        <p>{settings.customText}</p>
-        <a class="btn btn-ink" href={settings.storeUrl} target="_blank" rel="noopener noreferrer">{settings.customButtonLabel} <Icon name="arrow-up-right" /><span class="sr-only">(abre en otra pestaña)</span></a>
-      </div>
-      {customWork && (
-        <figure class="plate custom-plate">
-          <span class="photo"><img src={customWork.image} alt={customWork.description || customWork.title} loading="lazy" decoding="async" /></span>
-        </figure>
-      )}
-    </div>
-  </section>
-
-  {news.length > 0 && (
-    <section class="section board" aria-labelledby="news-title">
-      <div class="wrap">
-        <div class="section-head">
-          <h2 id="news-title"><Emphasis text={settings.newsTitle} /></h2>
-          <a class="text-link" href="/novedades/">{settings.newsLinkLabel} <Icon name="arrow-right" /></a>
-        </div>
-        <ul class="news-list">
-          {news.slice(0, 3).map((n) => (
-            <li class="news-item">
-              <a href={`/novedades/${n.slug}/`}>
-                <span class="news-meta">{n.publishedAt ? <time datetime={n.publishedAt}>{dateFmt.format(new Date(n.publishedAt))}</time> : <span class="news-date">Novedad</span>}</span>
-                <div><h3>{n.title}</h3>{n.excerpt && <p>{n.excerpt}</p>}</div>
-                <Icon name="arrow-right" />
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  )}
-
-  {usingDemo && (
-    <div class="board" style="padding-block:24px">
-      <div class="wrap"><p class="demo-note">Vista inicial: los títulos y categorías de las obras son orientativos. Consultá la tienda para precios, disponibilidad y catálogo comercial.</p></div>
-    </div>
-  )}
-</SiteLayout>
+<BaseLayout headerTone="brand" image={heroWork?.images[0]}>
+  <Hero home={home} settings={settings} work={heroWork} />
+  <FeaturedWorks works={featured} />
+  <Collections items={collectionItems} />
+  <About home={home} />
+  <CustomOrders home={home} />
+  <LatestNews news={news} />
+  <FinalCta block={home.finalCTA} settings={settings} />
+</BaseLayout>

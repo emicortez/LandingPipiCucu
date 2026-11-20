@@ -1,0 +1,41 @@
+---
+import WorkTile from '../artwork/WorkTile.astro';
+import Icon from '../ui/Icon.astro';
+import type { Artwork } from '../../types/content';
+
+interface Props { works: Artwork[]; }
+const { works } = Astro.props;
+// Two hanging columns: the right one starts lower, so works of any format interlock
+// without the empty rows a shared grid row would leave.
+const left = works.filter((_, i) => i % 2 === 0);
+const right = works.filter((_, i) => i % 2 === 1);
+const sizes = '(min-width: 64rem) 40vw, (min-width: 40rem) 50vw, 100vw';
+---
+{works.length > 0 && (
+  <section class="band featured" aria-labelledby="featured-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="featured-title">Obras del taller</h2>
+        <a class="link" href="/productos/">Ver todo el catálogo <Icon name="arrow-right" /></a>
+      </div>
+      <div class="featured-wall">
+        <div class="col col--left">{left.map((work) => <WorkTile work={work} sizes={sizes} />)}</div>
+        {right.length > 0 && <div class="col col--right">{right.map((work) => <WorkTile work={work} sizes={sizes} />)}</div>}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .featured-wall, .col { display: grid; gap: clamp(3rem, 6vw, 6rem); align-content: start; }
+  /* Tall works never exceed the viewport; the tile shrinks to the work's own width. */
+  .col :global(.work-tile) { width: fit-content; max-width: 100%; }
+  .col :global(.work-tile img) { width: auto; max-width: 100%; max-height: 82svh; }
+  @media (min-width: 40rem) {
+    .featured-wall { grid-template-columns: 5fr 1fr 6fr; column-gap: clamp(1rem, 2vw, 2rem); }
+    .col--left { grid-column: 1; }
+    .col--right { grid-column: 3; padding-top: clamp(4rem, 14vw, 14rem); }
+    .col--left :global(.work-tile:nth-child(even)) { justify-self: end; }
+    .col--right :global(.work-tile:nth-child(even)) { margin-left: 12%; }
+  }
+</style>

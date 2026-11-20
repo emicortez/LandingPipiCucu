@@ -1,0 +1,56 @@
+---
+/**
+ * Responsive picture of a work or person, always at its own aspect ratio (never cropped).
+ * Local assets go through astro:assets (AVIF + WebP); Sanity images use the image CDN.
+ */
+import { Picture } from 'astro:assets';
+import type { ArtImage } from '../../types/content';
+
+interface Props {
+  image: ArtImage;
+  /** `sizes` attribute: how wide the image renders at each breakpoint. */
+  sizes: string;
+  widths?: number[];
+  priority?: boolean;
+  class?: string;
+  /** Override alt (e.g. empty when an adjacent title already names the work). */
+  alt?: string;
+  [key: `data-${string}`]: unknown;
+}
+const { image, sizes, widths = [360, 540, 720, 960, 1280, 1600], priority = false, class: className, alt, ...rest } = Astro.props;
+const altText = alt ?? image.alt;
+const loading = priority ? 'eager' : 'lazy';
+const fetchpriority = priority ? 'high' : 'auto';
+const usable = widths.filter((w) => w <= image.width);
+if (!usable.length || usable[usable.length - 1] < image.width) usable.push(image.width);
+
+const remote = typeof image.src === 'string' ? image.src : null;
+const remoteSrcset = remote ? usable.map((w) => `${remote}?w=${w}&auto=format&fit=max&q=80 ${w}w`).join(', ') : '';
+---
+<div class:list={['art', className]} {...rest}>
+  {remote ? (
+    <img
+      src={`${remote}?w=${Math.min(960, image.width)}&auto=format&fit=max&q=80`}
+      srcset={remoteSrcset}
+      sizes={sizes}
+      width={image.width}
+      height={image.height}
+      alt={altText}
+      loading={loading}
+      fetchpriority={fetchpriority}
+      decoding="async"
+    />
+  ) : (
+    <Picture
+      src={image.src as ImageMetadata}
+      widths={usable}
+      sizes={sizes}
+      formats={['avif']}
+      fallbackFormat="webp"
+      alt={altText}
+      loading={loading}
+      fetchpriority={fetchpriority}
+      decoding="async"
+    />
+  )}
+</div>

@@ -1,0 +1,24 @@
+---
+import ArtworkImage from '../ui/ArtworkImage.astro';
+import type { Artwork } from '../../types/content';
+
+interface Props {
+  work: Artwork;
+  sizes: string;
+  heading?: 'h2' | 'h3';
+  class?: string;
+  [key: `data-${string}`]: unknown;
+}
+const { work, sizes, heading = 'h3', class: className, ...rest } = Astro.props;
+const Heading = heading;
+const cover = work.images[0];
+---
+<article class:list={['work-tile', className]} {...rest}>
+  <a class="art-link" href={`/productos/${work.slug}/`} data-track="artwork_click" data-track-label={work.slug}>
+    <ArtworkImage image={cover} sizes={sizes} />
+    <div class="art-meta">
+      <Heading class="art-title">{work.title}</Heading>
+      {work.category && <p class="art-cat">{work.category.name}</p>}
+    </div>
+  </a>
+</article>

@@ -1,0 +1,27 @@
+---
+import Icon from '../ui/Icon.astro';
+import type { TextBlock, SiteSettings } from '../../types/content';
+
+interface Props { block: TextBlock; settings: SiteSettings; }
+const { block, settings } = Astro.props;
+---
+<section class="band band--ink final-cta" aria-labelledby="final-title">
+  <div class="wrap final-grid">
+    <h2 id="final-title" class="t-1">{block.title}</h2>
+    <div class="final-side">
+      <p class="lede">{block.text}</p>
+      <div class="actions">
+        <a class="btn" href={settings.storeUrl} rel="noopener" target="_blank" data-track="store_click" data-track-label="final-cta">Ir a la tienda online <Icon name="arrow-up-right" /><span class="sr-only">(se abre en otra pestaña)</span></a>
+        <a class="btn btn--line" href="/contacto/">Contacto</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .final-cta { border-bottom: 1px solid rgb(248 244 241 / 0.16); }
+  .final-grid { display: grid; gap: 2rem; align-items: end; }
+  .final-grid h2 { max-width: 14ch; }
+  .final-side { display: grid; gap: 1.5rem; max-width: 30rem; }
+  @media (min-width: 64rem) { .final-grid { grid-template-columns: 7fr 5fr; column-gap: 4rem; } }
+</style>

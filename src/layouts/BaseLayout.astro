@@ -1,69 +1,105 @@
 ---
 import '../styles/global.css';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import { getImage } from 'astro:assets';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import bodoniLatin from '@fontsource-variable/bodoni-moda/files/bodoni-moda-latin-opsz-normal.woff2?url';
 import { getSettings } from '../lib/content';
-interface Props { title?: string; description?: string; }
-const { title = 'Pipí Cucú | Pintura decorativa', description = 'Pintura decorativa y obras hechas a mano en Buena Esperanza, San Luis.' } = Astro.props;
+import { indexable, SITE_LOCALE } from '../lib/seo/site';
+import { organization, serialize, website } from '../lib/seo/jsonld';
+import type { ArtImage } from '../types/content';
+
+interface Props {
+  /** Page title without the brand suffix; omit on the home page. */
+  title?: string;
+  description?: string;
+  image?: ArtImage;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  /** Header background: matches the band right under it. */
+  headerTone?: 'surface' | 'brand';
+  jsonLd?: Record<string, unknown>[];
+}
+
 const settings = await getSettings();
+const {
+  title,
+  description = settings.defaultSeo.description,
+  image,
+  type = 'website',
+  noindex = false,
+  headerTone = 'surface',
+  jsonLd = [],
+} = Astro.props;
+
+const site = (Astro.site ?? new URL('http://localhost:4321')).href;
+const fullTitle = title ? `${title} | ${settings.brandName}` : settings.defaultSeo.title;
+const canonical = new URL(Astro.url.pathname, site).href;
+const robots = !indexable || noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
+
+async function shareImage(img: ArtImage | undefined): Promise<string> {
+  if (!img) return new URL('/og-default.jpg', site).href;
+  if (typeof img.src === 'string') return `${img.src}?w=1200&h=630&fit=fill&bg=F3DCDF&fm=jpg&q=82`;
+  const out = await getImage({ src: img.src, width: Math.min(1200, img.width), format: 'jpg' });
+  return new URL(out.src, site).href;
+}
+const ogImage = await shareImage(image ?? settings.socialImage);
+const isHome = Astro.url.pathname === '/';
+const graph = [
+  ...(isHome ? [organization(settings, site, new URL('/icon-512.png', site).href), website(settings, site)] : []),
+  ...jsonLd,
+];
+
+const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN;
+const plausibleSrc = import.meta.env.PUBLIC_PLAUSIBLE_SRC || 'https://plausible.io/js/script.js';
 ---
 <!doctype html>
 <html lang="es-AR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="theme-color" content="#eecdd3" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <title>{title}</title>
-    <link rel="icon" type="image/webp" href="/images/logo-original.webp" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+    <meta name="robots" content={robots} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#f3dcdf" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap.xml" />
+    <link rel="preload" href={bodoniLatin} as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:locale" content={SITE_LOCALE} />
+    <meta property="og:site_name" content={settings.brandName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {graph.map((g) => <script type="application/ld+json" set:html={serialize(g)} />)}
+
+    <script is:inline>
+      // Motion bootstrap: hide hero parts only when motion will play; never strand them hidden.
+      (function () {
+        var d = document.documentElement;
+        if (!window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        d.classList.add('motion-pending');
+        setTimeout(function () { d.classList.remove('motion-pending'); }, 2500);
+      })();
+    </script>
+    {plausibleDomain && <script defer data-domain={plausibleDomain} src={plausibleSrc}></script>}
   </head>
   <body>
     <a class="skip-link" href="#main">Saltar al contenido</a>
-    <Header settings={settings} />
-    <main id="main"><slot /></main>
+    <Header settings={settings} tone={headerTone} />
+    <main id="main" tabindex="-1"><slot /></main>
     <Footer settings={settings} />
-    <script is:inline>
-      // Scroll reveals: only plates below the first viewport are opted in, so nothing
-      // already on screen moves and a failed script leaves every plate at rest.
-      (() => {
-        if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        const io = new IntersectionObserver((entries) => {
-          let i = 0;
-          for (const entry of entries) {
-            if (!entry.isIntersecting) continue;
-            entry.target.style.setProperty('--reveal-delay', Math.min(i++, 4) * 90 + 'ms');
-            entry.target.classList.add('is-in');
-            io.unobserve(entry.target);
-          }
-        }, { rootMargin: '0px 0px -8% 0px' });
-        const targets = [...document.querySelectorAll('main .plate:not(.hero-plate):not(.ficha-plate)')];
-        const below = targets.filter((el) => el.getBoundingClientRect().top > innerHeight);
-        below.forEach((el) => {
-          el.classList.add('reveal');
-          io.observe(el);
-        });
-      })();
-    </script>
     <script>
-      const toggle = document.querySelector<HTMLButtonElement>('#menu-toggle');
-      const nav = document.querySelector<HTMLElement>('#main-nav');
-      if (toggle && nav) {
-        const setOpen = (open: boolean) => {
-          nav.classList.toggle('open', open);
-          toggle.setAttribute('aria-expanded', String(open));
-        };
-        toggle.addEventListener('click', () => setOpen(!nav.classList.contains('open')));
-        nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && nav.classList.contains('open')) {
-            setOpen(false);
-            toggle.focus();
-          }
-        });
-      }
+      import '../scripts/analytics';
     </script>
   </body>
 </html>

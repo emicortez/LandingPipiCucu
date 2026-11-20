@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArtworkImage from '../components/ui/ArtworkImage.astro';
+import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
+import Icon from '../components/ui/Icon.astro';
+import { getArtists, getSettings } from '../lib/content';
+import { foundersPhoto, nameDefinition } from '../data/fallback';
+import { breadcrumbList, type Crumb } from '../lib/seo/jsonld';
+import { paragraphs } from '../lib/format';
+
+const [artists, settings] = await Promise.all([getArtists(), getSettings()]);
+const crumbs: Crumb[] = [{ name: 'Inicio', path: '/' }, { name: 'Nosotras', path: '/nosotras/' }];
+const site = (Astro.site ?? new URL('http://localhost:4321')).href;
+---
+<BaseLayout
+  title="Nosotras: Deby y Agos, madre e hija"
+  description="Pipí Cucú es el taller de pintura decorativa de Deby y Agos, madre e hija, en Buena Esperanza, San Luis. Conocé quiénes pintan cada obra."
+  image={foundersPhoto}
+  headerTone="brand"
+  jsonLd={[breadcrumbList(crumbs, site)]}
+>
+  <section class="band--brand story-intro" aria-labelledby="page-title">
+    <div class="wrap story-grid">
+      <div class="story-copy">
+        <Breadcrumbs crumbs={crumbs} />
+        <h1 id="page-title" class="t-display">Madre e hija, un mismo taller.</h1>
+        <p class="lede">Somos Deborah y Agostina. Creamos cuadros y objetos pintados a mano en {settings.location}.</p>
+      </div>
+      <ArtworkImage class="story-photo" image={foundersPhoto} sizes="(min-width: 64rem) 26vw, 70vw" priority />
+    </div>
+  </section>
+
+  <section class="band definition" aria-labelledby="definition-title">
+    <div class="wrap definition-grid">
+      <h2 id="definition-title" class="t-1">{nameDefinition.term}</h2>
+      <div>
+        <p class="muted">{nameDefinition.note}</p>
+        <ol class="senses">
+          {nameDefinition.senses.map((s) => <li>{s}</li>)}
+        </ol>
+        <p class="example">«{nameDefinition.example}»</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--tint artists" aria-labelledby="artists-title">
+    <div class="wrap">
+      <h2 id="artists-title" class="t-1 artists-title">Quiénes pintan</h2>
+      <div class="artist-list">
+        {artists.map((a) => (
+          <article class="artist" aria-labelledby={`artist-${a.id}`}>
+            {a.photo && <ArtworkImage class="artist-photo" image={a.photo} sizes="(min-width: 64rem) 20vw, 60vw" />}
+            <h3 id={`artist-${a.id}`} class="t-2">{a.name}</h3>
+            <p class="artist-role">{a.role}</p>
+            <div class="artist-bio">{paragraphs(a.biography).map((p) => <p>{p}</p>)}</div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--ink" aria-labelledby="next-title">
+    <div class="wrap next">
+      <h2 id="next-title" class="t-2">Mirá lo que estamos pintando</h2>
+      <div class="actions">
+        <a class="btn" href="/productos/">Ver el catálogo <Icon name="arrow-right" /></a>
+        <a class="btn btn--line" href={settings.instagramUrl} rel="noopener" target="_blank" data-track="instagram_click" data-track-label="nosotras"><Icon name="instagram" /> Seguinos en Instagram<span class="sr-only">(se abre en otra pestaña)</span></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .story-intro { padding-block: clamp(1rem, 2vw, 1.5rem) var(--section); }
+  .story-grid { display: grid; gap: 2.5rem; }
+  .story-copy { display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); align-content: start; }
+  .story-copy h1 { margin-top: clamp(1rem, 3vw, 2.5rem); max-width: 10ch; }
+  .story-copy .lede { color: var(--color-ink); max-width: 30rem; }
+  .story-photo { width: min(100%, 20rem); }
+  .definition-grid { display: grid; gap: 2rem; }
+  .senses { margin-top: 1rem; padding-left: 1.5rem; display: grid; gap: 1.25rem; font-family: var(--font-display); font-size: var(--step-2); line-height: 1.3; max-width: 34ch; }
+  .senses li::marker { font-size: 0.7em; color: var(--color-rose-700); }
+  .example { margin-top: 2rem; color: var(--text-muted); font-size: var(--step-1); max-width: 34rem; }
+  .artists-title { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+  .artist-list { display: grid; gap: 4rem; }
+  .artist { display: grid; gap: 1rem; align-content: start; max-width: 34rem; }
+  .artist-photo { width: min(100%, 16rem); }
+  .artist-role { color: var(--text-muted); }
+  .artist-bio { display: grid; gap: 1em; font-size: var(--step-1); line-height: 1.55; }
+  .next { display: grid; gap: 2rem; }
+  @media (min-width: 64rem) {
+    .story-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 2rem; align-items: end; }
+    .story-copy { grid-column: 1 / span 7; align-self: center; }
+    .story-photo { grid-column: 9 / span 3; width: 100%; }
+    .definition-grid { grid-template-columns: 5fr 7fr; column-gap: 4rem; }
+    .artist-list { grid-template-columns: 1fr 1fr; column-gap: 4rem; }
+    .artist:nth-child(even) { margin-top: 8rem; }
+    .next { grid-template-columns: 1fr auto; align-items: center; }
+  }
+</style>

@@ -1,0 +1,88 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/layout/PageIntro.astro';
+import WorkTile from '../components/artwork/WorkTile.astro';
+import Icon from '../components/ui/Icon.astro';
+import { getArtworks, getHome, getSettings } from '../lib/content';
+import { customOrders } from '../data/fallback';
+import { breadcrumbList, type Crumb } from '../lib/seo/jsonld';
+import { whatsappHref } from '../lib/urls';
+
+const [settings, home, works] = await Promise.all([getSettings(), getHome(), getArtworks()]);
+// Examples: works the owners marked as available to order custom; else a few from the catalog.
+const marked = works.filter((w) => w.customOrderAvailable);
+const examples = (marked.length ? marked : works.filter((w) => w.featured)).slice(0, 3);
+const whatsapp = whatsappHref(settings.whatsappNumber, 'Hola, quería consultar por un cuadro personalizado.');
+const crumbs: Crumb[] = [{ name: 'Inicio', path: '/' }, { name: 'Personalizados', path: '/personalizados/' }];
+const site = (Astro.site ?? new URL('http://localhost:4321')).href;
+---
+<BaseLayout
+  title="Cuadros personalizados pintados a mano"
+  description="Pedí un cuadro personalizado a Pipí Cucú: charlamos sobre tus ideas, colores, medidas y estilo. Acrílico, acuarela, óleo y técnicas mixtas. Buena Esperanza, San Luis."
+  headerTone="brand"
+  jsonLd={[breadcrumbList(crumbs, site)]}
+>
+  <PageIntro title={home.customOrdersSection.title} lede={home.customOrdersSection.text} crumbs={crumbs}>
+    <div class="actions intro-actions">
+      {whatsapp ? (
+        <a class="btn" href={whatsapp} rel="noopener" target="_blank" data-track="whatsapp_click" data-track-label="personalizados"><Icon name="whatsapp" /> Escribinos por WhatsApp<span class="sr-only">(se abre en otra pestaña)</span></a>
+      ) : (
+        <a class="btn" href={settings.instagramUrl} rel="noopener" target="_blank" data-track="instagram_click" data-track-label="personalizados"><Icon name="instagram" /> Escribinos por Instagram<span class="sr-only">(se abre en otra pestaña)</span></a>
+      )}
+      {settings.customOrdersUrl && (
+        <a class="btn btn--line" href={settings.customOrdersUrl} rel="noopener" target="_blank" data-track="store_click" data-track-label="personalizados">Pedidos en la tienda online <Icon name="arrow-up-right" /><span class="sr-only">(se abre en otra pestaña)</span></a>
+      )}
+    </div>
+  </PageIntro>
+
+  <section class="band" aria-labelledby="process-title">
+    <div class="wrap process-grid">
+      <h2 id="process-title" class="t-1">Cómo trabajamos</h2>
+      <ol class="process">
+        {customOrders.steps.map((s) => <li><h3 class="t-3">{s.title}</h3><p class="muted">{s.text}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="band band--tint" aria-labelledby="details-title">
+    <div class="wrap details-grid">
+      <div>
+        <h2 id="details-title" class="t-2">Qué conviene contarnos</h2>
+        <ul class="bullets">{customOrders.bring.map((b) => <li>{b}</li>)}</ul>
+      </div>
+      <div>
+        <h2 class="t-2">Técnicas</h2>
+        <ul class="bullets">{customOrders.techniques.map((t) => <li>{t}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  {examples.length > 0 && (
+    <section class="band" aria-labelledby="examples-title">
+      <div class="wrap">
+        <div class="section-head"><h2 id="examples-title" class="t-2">Algunas obras del taller</h2></div>
+        <ul class="examples">{examples.map((w) => <li><WorkTile work={w} sizes="(min-width: 64rem) 30vw, 100vw" /></li>)}</ul>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .intro-actions { margin-top: 2rem; }
+  .process-grid, .details-grid { display: grid; gap: 2.5rem; }
+  .process { list-style: none; counter-reset: s; display: grid; gap: 2rem; }
+  .process li { counter-increment: s; display: grid; grid-template-columns: 4rem 1fr; column-gap: 1rem; }
+  .process li::before { content: counter(s); grid-row: span 2; font-family: var(--font-display); font-size: var(--step-4); line-height: 0.85; color: var(--color-rose-500); }
+  .process p { margin-top: 0.4rem; max-width: 28rem; }
+  .bullets { margin-top: 1.25rem; padding-left: 1.2rem; display: grid; gap: 0.5rem; font-size: var(--step-1); }
+  .bullets li::marker { color: var(--color-rose-700); }
+  .examples { list-style: none; display: grid; gap: 3rem 2rem; }
+  @media (min-width: 40rem) { .examples { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 64rem) {
+    .process-grid { grid-template-columns: 5fr 7fr; column-gap: 4rem; }
+    .process { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 2rem; }
+    .process li { grid-template-columns: 1fr; }
+    .process li::before { grid-row: auto; margin-bottom: 1rem; }
+    .details-grid { grid-template-columns: 1fr 1fr; column-gap: 4rem; }
+  }
+</style>

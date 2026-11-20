@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/layout/PageIntro.astro';
+import Catalog from '../../components/catalog/Catalog.astro';
+import Icon from '../../components/ui/Icon.astro';
+import { getArtworks, getCategories, getSettings } from '../../lib/content';
+import { breadcrumbList, type Crumb } from '../../lib/seo/jsonld';
+import type { Category } from '../../types/content';
+
+export async function getStaticPaths() {
+  const categories = await getCategories();
+  return categories.map((category) => ({ params: { slug: category.slug }, props: { category } }));
+}
+interface Props { category: Category; }
+const { category } = Astro.props;
+const [works, settings] = await Promise.all([getArtworks(), getSettings()]);
+const inCategory = works.filter((w) => w.category?.slug === category.slug);
+const storeHref = category.storeUrl ?? settings.storeUrl;
+const crumbs: Crumb[] = [
+  { name: 'Inicio', path: '/' },
+  { name: 'Catálogo', path: '/productos/' },
+  { name: category.name, path: `/categorias/${category.slug}/` },
+];
+const site = (Astro.site ?? new URL('http://localhost:4321')).href;
+---
+<BaseLayout
+  title={category.seo.title || `${category.name} pintados a mano`}
+  description={category.seo.description || `${category.name} de Pipí Cucú: ${category.description ?? 'piezas pintadas a mano'} Hechas por Deby y Agos en Buena Esperanza, San Luis.`}
+  image={category.seo.image ?? category.cover ?? inCategory[0]?.images[0]}
+  headerTone="brand"
+  noindex={inCategory.length === 0}
+  jsonLd={[breadcrumbList(crumbs, site)]}
+>
+  <PageIntro title={category.name} lede={category.description} crumbs={crumbs}>
+    <div class="actions intro-actions">
+      <a class="link" href={storeHref} rel="noopener" target="_blank" data-track="store_click" data-track-label={`categoria:${category.slug}`}>Ver {category.name.toLocaleLowerCase('es')} en la tienda <Icon name="arrow-up-right" /><span class="sr-only">(se abre en otra pestaña)</span></a>
+    </div>
+  </PageIntro>
+  <section class="band" aria-label={`Obras de ${category.name}`}>
+    <div class="wrap">
+      {inCategory.length > 0 ? (
+        <Catalog works={inCategory} categories={[]} />
+      ) : (
+        <div class="cat-empty">
+          <h2 class="t-2">Todavía no subimos estas obras a la web</h2>
+          <p class="lede">Mientras tanto, podés ver todo lo de {category.name.toLocaleLowerCase('es')} en nuestra tienda online.</p>
+          <div class="actions">
+            <a class="btn" href={storeHref} rel="noopener" target="_blank" data-track="store_click" data-track-label={`categoria-vacia:${category.slug}`}>Ver en la tienda <Icon name="arrow-up-right" /><span class="sr-only">(se abre en otra pestaña)</span></a>
+            <a class="btn btn--line" href="/productos/">Ver el catálogo</a>
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro-actions { margin-top: 1.25rem; }
+  .cat-empty { display: grid; gap: 1.25rem; justify-items: start; max-width: 40rem; }
+</style>

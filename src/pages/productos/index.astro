@@ -1,22 +1,32 @@
 ---
-import SiteLayout from '../../layouts/SiteLayout.astro';
-import WorkGrid from '../../components/WorkGrid.astro';
-import { getWorks, getSettings, usingDemo } from '../../lib/content';
-const [works, settings] = await Promise.all([getWorks(), getSettings()]);
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/layout/PageIntro.astro';
+import Catalog from '../../components/catalog/Catalog.astro';
+import { getArtworks, getCategories, usingDemo } from '../../lib/content';
+import { breadcrumbList, type Crumb } from '../../lib/seo/jsonld';
+
+const [works, categories] = await Promise.all([getArtworks(), getCategories()]);
+const withWorks = categories.filter((c) => works.some((w) => w.category?.slug === c.slug));
+const crumbs: Crumb[] = [{ name: 'Inicio', path: '/' }, { name: 'Catálogo', path: '/productos/' }];
+const site = (Astro.site ?? new URL('http://localhost:4321')).href;
 ---
-<SiteLayout title="Catálogo de obras | Pipí Cucú" description="Todas las obras de Pipí Cucú, pintadas a mano por Deby y Agos. Filtrá por categoría o buscá una obra.">
-  <div class="board">
-    <section class="page-intro field" aria-labelledby="catalog-title">
-      <div class="wrap">
-        <h1 id="catalog-title">El <em>herbario</em> de obras</h1>
-        <p class="lede">Cada obra lleva su número en la colección. Abrí la que te guste para ver su ficha completa; la compra se hace en nuestra tienda.</p>
-        {usingDemo && <p class="demo-note">Catálogo de ejemplo con las fotos recibidas. Los nombres y categorías son orientativos; el inventario comercial está en Empretienda.</p>}
-      </div>
-    </section>
-    <section class="section catalog" aria-label="Obras">
-      <div class="wrap">
-        <WorkGrid works={works} settings={settings} showFilters={true} />
-      </div>
-    </section>
-  </div>
-</SiteLayout>
+<BaseLayout
+  title="Catálogo de obras pintadas a mano"
+  description="Cuadros y objetos decorativos pintados a mano por Deby y Agos en Buena Esperanza, San Luis. Filtrá por categoría o buscá una obra por su nombre."
+  headerTone="brand"
+  jsonLd={[breadcrumbList(crumbs, site)]}
+>
+  <PageIntro title="Catálogo" lede="Todas las obras del taller. Abrí una para verla completa; la compra se hace en nuestra tienda online." crumbs={crumbs}>
+    {usingDemo && <p class="notice intro-notice">Catálogo de muestra con fotos reales del taller. Los nombres son provisorios hasta que se carguen desde el panel.</p>}
+  </PageIntro>
+  <section class="band catalog-band" aria-label="Obras">
+    <div class="wrap">
+      <Catalog works={works} categories={withWorks} />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .catalog-band { padding-top: clamp(2.5rem, 5vw, 4rem); }
+  .intro-notice { margin-top: 1.5rem; }
+</style>

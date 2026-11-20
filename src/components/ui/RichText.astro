@@ -1,0 +1,47 @@
+---
+/**
+ * Renders the Portable Text subset allowed by the Studio. Text is always escaped by Astro;
+ * links pass through safeExternalUrl (https/mailto) or must be site-relative paths.
+ */
+import type { RichBlock, RichSpan } from '../../types/content';
+import { safeExternalUrl } from '../../lib/urls';
+
+interface Props { blocks: RichBlock[]; }
+const { blocks } = Astro.props;
+
+type Group = { kind: 'list'; ordered: boolean; items: RichBlock[] } | { kind: 'block'; block: RichBlock };
+const groups: Group[] = [];
+for (const block of blocks.filter((b) => b?._type === 'block')) {
+  const last = groups[groups.length - 1];
+  if (block.listItem) {
+    const ordered = block.listItem === 'number';
+    if (last?.kind === 'list' && last.ordered === ordered) last.items.push(block);
+    else groups.push({ kind: 'list', ordered, items: [block] });
+  } else groups.push({ kind: 'block', block });
+}
+
+function hrefFor(block: RichBlock, span: RichSpan): string | undefined {
+  const key = span.marks?.find((m) => block.markDefs?.some((d) => d._key === m));
+  const raw = block.markDefs?.find((d) => d._key === key)?.href;
+  if (!raw) return undefined;
+  if (raw.startsWith('/') && !raw.startsWith('//')) return raw;
+  return safeExternalUrl(raw, { allowMailto: true });
+}
+const Tag = (style?: string) => (style === 'h2' ? 'h2' : style === 'h3' ? 'h3' : style === 'blockquote' ? 'blockquote' : 'p');
+---
+{groups.map((g) => {
+  const spans = (block: RichBlock) => block.children.map((span) => {
+    const href = hrefFor(block, span);
+    let node: any = span.text;
+    if (span.marks?.includes('strong')) node = <strong>{node}</strong>;
+    if (span.marks?.includes('em')) node = <em>{node}</em>;
+    if (href) node = href.startsWith('/') ? <a href={href}>{node}</a> : <a href={href} rel="noopener" target="_blank">{node}</a>;
+    return node;
+  });
+  if (g.kind === 'list') {
+    const List = g.ordered ? 'ol' : 'ul';
+    return <List>{g.items.map((b) => <li>{spans(b)}</li>)}</List>;
+  }
+  const T = Tag(g.block.style);
+  return <T>{spans(g.block)}</T>;
+})}

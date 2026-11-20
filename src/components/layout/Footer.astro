@@ -1,32 +1,53 @@
 ---
-import Icon from './Icon.astro';
-import Emphasis from './Emphasis.astro';
-import type { Settings } from '../data/demo';
-interface Props { settings: Settings; }
+import { Image } from 'astro:assets';
+import Icon from '../ui/Icon.astro';
+import monogram from '../../assets/brand/monogram-ivory.png';
+import { navLinks } from '../../lib/navigation';
+import { whatsappHref } from '../../lib/urls';
+import type { SiteSettings } from '../../types/content';
+
+interface Props { settings: SiteSettings; }
 const { settings } = Astro.props;
+const whatsapp = whatsappHref(settings.whatsappNumber);
+const year = new Date().getFullYear();
 ---
-<footer class="site-footer">
+<footer class="site-footer on-ink">
   <div class="wrap">
     <div class="footer-grid">
-      <img class="footer-logo" src={settings.logoUrl} alt="Logo de Pipí Cucú, pintura decorativa" width="132" height="139" loading="lazy" />
-      <div class="footer-copy">
-        <h2 class="footer-title"><Emphasis text={settings.footerTitle} /></h2>
-        <p>{settings.footerText}</p>
-        <div class="footer-cta"><a class="btn" href={settings.storeUrl} target="_blank" rel="noopener noreferrer">{settings.footerButtonLabel} <Icon name="arrow-up-right" /><span class="sr-only">(abre en otra pestaña)</span></a></div>
+      <div class="footer-brand">
+        <Image src={monogram} alt={`${settings.brandName}, ${settings.descriptor.toLocaleLowerCase('es')}`} width={78} height={Math.round(78 * monogram.height / monogram.width)} loading="lazy" />
+        <p>{settings.descriptor} hecha a mano por Deby y Agos en {settings.location}.</p>
       </div>
-      <nav aria-label="Pie de página">
-        <ul class="footer-links">
-          <li><a href="/productos/">Obras</a></li>
-          <li><a href="/#nosotras">Nosotras</a></li>
-          <li><a href="/#personalizados">Personalizados</a></li>
-          <li><a href="/novedades/">Novedades</a></li>
-          <li><a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer"><Icon name="instagram" /> Instagram<span class="sr-only">(abre en otra pestaña)</span></a></li>
+      <div class="footer-col">
+        <h2>Sitio</h2>
+        <ul>
+          <li><a href="/">Inicio</a></li>
+          {navLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
         </ul>
-      </nav>
+      </div>
+      <div class="footer-col">
+        <h2>Comprar</h2>
+        <ul>
+          <li><a href={settings.storeUrl} rel="noopener" target="_blank" data-track="store_click" data-track-label="footer">Tienda online <Icon name="arrow-up-right" /><span class="sr-only">(se abre en otra pestaña)</span></a></li>
+          {settings.customOrdersUrl && <li><a href={settings.customOrdersUrl} rel="noopener" target="_blank" data-track="store_click" data-track-label="footer-custom">Pedidos personalizados <Icon name="arrow-up-right" /><span class="sr-only">(se abre en otra pestaña)</span></a></li>}
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h2>Contacto</h2>
+        <ul>
+          <li><a href={settings.instagramUrl} rel="noopener" target="_blank" data-track="instagram_click" data-track-label="footer"><Icon name="instagram" /> @pipicucu_pc<span class="sr-only">(se abre en otra pestaña)</span></a></li>
+          {whatsapp && <li><a href={whatsapp} rel="noopener" target="_blank" data-track="whatsapp_click" data-track-label="footer"><Icon name="whatsapp" /> WhatsApp<span class="sr-only">(se abre en otra pestaña)</span></a></li>}
+          <li><span class="footer-place"><Icon name="pin" /> {settings.location}</span></li>
+        </ul>
+      </div>
     </div>
     <div class="footer-bottom">
-      <span>© {new Date().getFullYear()} Pipí Cucú — Pintura decorativa</span>
-      <span>{settings.footerNote}</span>
+      <p>© {year} {settings.brandName}. Obras y fotografías de Deby y Agos.</p>
+      <p>Las compras, los pagos y los envíos se gestionan en nuestra tienda de Empretienda.</p>
     </div>
   </div>
 </footer>
+
+<style>
+  .footer-place { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; color: var(--text-inverse-muted); }
+</style>

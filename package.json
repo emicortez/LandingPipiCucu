@@ -7,16 +7,26 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "test:e2e": "playwright test --grep-invert capture",
+    "test:screens": "playwright test screens --project=desktop",
+    "qa": "astro check && astro build && playwright test --grep-invert capture",
+    "brand:assets": "node scripts/brand-assets.mjs"
   },
   "dependencies": {
-    "astro": "^7.0.0",
+    "@fontsource-variable/bodoni-moda": "^5.3.0",
+    "@fontsource-variable/jost": "^5.3.0",
     "@sanity/client": "^7.0.0",
-    "tailwindcss": "^4.0.0",
-    "@tailwindcss/vite": "^4.0.0"
+    "@tailwindcss/vite": "^4.0.0",
+    "astro": "^7.0.0",
+    "gsap": "^3.15.1",
+    "tailwindcss": "^4.0.0"
   },
   "devDependencies": {
-    "typescript": "^5.0.0",
-    "@astrojs/check": "^0.9.0"
+    "@astrojs/check": "^0.9.0",
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.65.1",
+    "@types/node": "^24.19.2",
+    "typescript": "^5.0.0"
   }
 }
