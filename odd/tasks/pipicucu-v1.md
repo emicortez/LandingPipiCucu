@@ -19,14 +19,14 @@ Branch: `feat/pipicucu-v1`. Delivery: ask-on-risk, work-unit commits. Test runne
 
 ## Tasks
 
-- T1 (S1-S3, S8): Design system: tokens, fonts (self-hosted), logo derivatives from the original raster, image pipeline (astro:assets + Sanity URLs). Route: inline. Status: pending.
-- T2 (S2, S5, S6): Content contract (types, GROQ, demo data from real sources with provenance). Route: inline. Status: pending.
-- T3 (S6): Sanity Studio schemas + desk structure + CMS_GUIDE. Route: delegated (parallel unit, disjoint `studio/`). Status: pending.
-- T4 (S1, S4, S5, S8): Home with GSAP motion. Route: inline. Status: pending.
-- T5 (S5): Catalog, ficha, categories, nosotras, personalizados, novedades, contacto, 404. Route: inline. Status: pending.
-- T6 (S7, S9): SEO (meta, JSON-LD, sitemap, robots, noindex), headers, analytics hooks. Route: inline. Status: pending.
-- T7 (S10): Playwright + axe tests, screenshots at 320/390/768/1024/1440/1920, fixes. Route: inline. Status: pending.
-- T8 (S11): Documentation set. Route: inline. Status: pending.
+- T1 (S1-S3, S8): Design system: tokens, fonts (self-hosted), logo derivatives from the original raster, image pipeline (astro:assets + Sanity URLs). Route: inline. Status: done. Commit: 6383e66.
+- T2 (S2, S5, S6): Content contract (types, GROQ, demo data from real sources with provenance). Route: inline. Status: done. Commit: 6383e66.
+- T3 (S6): Sanity Studio schemas + desk structure + CMS_GUIDE. Route: delegated (parallel unit, disjoint `studio/`). Status: done (studio tsc + sanity build ok; `studio/.env.example` not editable: permission rule). Commit: b9f10ef.
+- T4 (S1, S4, S5, S8): Home with GSAP motion. Route: inline. Status: done. Commits: 6383e66, 92d8572 (LCP fix).
+- T5 (S5): Catalog, ficha, categories, nosotras, personalizados, novedades, contacto, 404. Route: inline. Status: done. Commit: 6383e66.
+- T6 (S7, S9): SEO (meta, JSON-LD, sitemap, robots, noindex), headers, analytics hooks. Route: inline. Status: done (production validation pending). Commits: 6383e66, test commit.
+- T7 (S10): Playwright + axe tests, screenshots at 320/390/768/1024/1440/1920, fixes. Route: inline. Status: done (80/80 e2e, captures reviewed, lab vitals). 
+- T8 (S11): Documentation set. Route: inline. Status: done except `.env.example` (permission-protected; values in DEPLOYMENT.md).
 
 ## Log
 
@@ -34,3 +34,5 @@ Branch: `feat/pipicucu-v1`. Delivery: ask-on-risk, work-unit commits. Test runne
 - L2 (2026-11-20) audit: previous herbarium work checkpointed as c911d9a. Assets: `agos.webp`, `deby.webp`, `founders.webp`, `brand*.webp` are Instagram screenshots with baked text/UI (not usable as photos); `gato.webp` has a mouse cursor baked over the ear; `founders-photo.webp` is low-res (390x816); logo is a 595x626 raster on `#F3DCDF`. Demo categories (Florales/Figurativas/Retratos/Simbólicas) were invented; real store categories: General (Porta llaves), Navidad, Regionales (Tradición), Cuadros (Naturaleza, Infantiles).
 - L3 sources (Empretienda, external — not owner-confirmed for this site): tagline "Arte hecho a mano para llenar tus espacios de vida."; "Somos Deborah y Agostina (madre e hija) y creamos cuadros y objetos pintados a mano con dedicación. Cada pieza es única, como vos."; name definition from /quienes-somos; custom orders: techniques Acrílico, Acuarela, Óleo, Técnicas mixtas; process "escribinos por mensaje privado y coordinamos una cita (virtual o presencial)"; location "Buena Esperanza. San Luis. Argentina"; WhatsApp `wa.me/5492658409298` shown on the store (kept disabled until owners confirm it for this site). Instagram post text (owner-published): "Pintamos recuerdos, historias y lugares que merecen permanecer."; Deby and Agos bios from their own posts.
 - L4 decision: typography moves from Playfair Display + DM Sans to Bodoni Moda (didone, matches the logo's PC letterforms) + Jost (geometric, matches the logo's "PIPÍ CUCÚ / Pintura decorativa" lettering), self-hosted. Reverting is a two-token change. Palette rose aligned to the logo background `#F3DCDF`.
+- L5 (2026-11-20) verification: astro check 0/0; build 16 pages; e2e 80/80 (Edge, desktop + Pixel 7) incl. axe WCAG 2.2 AA no serious/critical; lab LCP home mobile 4136 ms → 980 ms after removing headline/mobile-photo from the entrance. Bugs fixed: Tailwind `h-*` class collision, PNG fallbacks, featured grid gaps, brand link name mismatch.
+- L6 next: owners to create Sanity project + load real catalog; vector logo; clean cat photo; confirm WhatsApp/domain; deploy to Cloudflare Pages; validate rich results; ESLint not configured.

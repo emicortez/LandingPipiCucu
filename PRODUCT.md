@@ -28,18 +28,18 @@ Obras pintadas a mano por una madre y una hija, piezas únicas y personalizadas 
 
 ## Capabilities and Constraints
 
-- Rutas: `/`, `/productos/` (filtro + búsqueda en cliente), `/productos/[slug]/`, `/novedades/`, `/novedades/[slug]/`, `/404`.
+- Rutas: `/`, `/productos/` (filtro, búsqueda y orden en cliente), `/productos/[slug]/`, `/categorias/[slug]/`, `/nosotras/`, `/personalizados/`, `/novedades/` (+ `[slug]`), `/contacto/`, `/404`.
 - Sin carrito, checkout, precios ni disponibilidad en la web; todo CTA comercial va a Empretienda (URL de la obra si existe, si no la tienda general).
 - Las obras pueden ser horizontales, verticales, cuadradas o circulares: la obra se muestra completa en la ficha.
-- Stack existente: Astro 7 estático, TypeScript, Tailwind 4 + CSS propio, Sanity. JavaScript liviano; sin React, GSAP ni Lenis.
+- Stack existente: Astro 7 estático, TypeScript, Tailwind 4 + CSS propio, Sanity. JavaScript liviano; GSAP solo en los momentos de movimiento (V1, pedido en el brief); sin React ni Lenis.
 - Sin Sanity configurado se usan datos demo con nombres y categorías orientativos; las categorías oficiales las definen las dueñas.
 - Indefinido: canal WhatsApp (preparado en el CMS, sin número).
 
 ## Brand Commitments
 
 - Monograma **PC.**, nombre **Pipí Cucú** y descriptor **Pintura decorativa**.
-- Paleta fija (confirmada): rosa empolvado `#EECDD3`, carbón `#28242A`, marfil `#F8F5F1`, rosa profundo `#B56F82`.
-- Tipografías fijas (confirmadas): Playfair Display para títulos, DM Sans para interfaz y cuerpo.
+- Paleta (V1, ajustada al logo original): rosa empolvado `#F3DCDF`, carbón `#252326`, marfil `#F8F4F1`, rosa profundo `#B66C82` (texto: `#8C4660`). Ver DESIGN_SYSTEM.md.
+- Tipografías (V1): Bodoni Moda para títulos (didone como el monograma) y Jost para interfaz y cuerpo. Antes: Playfair Display + DM Sans; volver es un cambio de dos tokens.
 - Flores y mariposas solo como guiños puntuales; nada de estética de plantilla o flyer.
 - Voz cercana y artística, español rioplatense.
 
