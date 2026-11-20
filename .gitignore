@@ -7,3 +7,4 @@ dist/
 studio/node_modules/
 studio/dist/
 .atl/
+studio/.sanity/
