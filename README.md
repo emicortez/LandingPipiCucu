@@ -48,6 +48,16 @@ El administrador se ejecuta por defecto en `http://localhost:3333`; Sanity gesti
 
 **Importante:** crear primero categorías y un documento de configuración; luego cargar obras y marcar `visible=true`.
 
+### Administración
+
+Desde Sanity Studio las dueñas pueden, sin programar:
+
+- **Obras:** agregar nuevas, ocultarlas (desmarcar "Mostrar en la web"), cambiar el orden ("Orden de exhibición") y destacarlas en la home ("Destacada en la home").
+- **Obra de portada:** en "Configuración del sitio" → pestaña *Portada*, elegir la obra grande de la home. Si queda vacía o la obra está oculta, se usa la primera obra destacada.
+- **Textos de la landing:** en "Configuración del sitio", una pestaña por sección (Enlaces, Portada, Láminas elegidas, Nosotras, Personalizados, Novedades, Pie de página). En los títulos, las palabras entre `*asteriscos*` se muestran en cursiva.
+
+Un texto vacío vuelve al texto original del sitio. Los cambios publicados aparecen en producción después de reconstruir la web (ver punto 4).
+
 ## 3. Conectar Astro a Sanity
 
 En `.env` (raíz):

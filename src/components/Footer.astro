@@ -1,4 +1,32 @@
 ---
-import type {Settings} from '../data/demo';const {settings}=Astro.props as {settings:Settings};
+import Icon from './Icon.astro';
+import Emphasis from './Emphasis.astro';
+import type { Settings } from '../data/demo';
+interface Props { settings: Settings; }
+const { settings } = Astro.props;
 ---
-<footer class="footer"><div class="wrap"><div class="footer-top"><div><span class="eyebrow muted">Pintura decorativa · Hecha a mano</span><h2 class="footer-title">Un poquito de <em>arte.</em></h2><p class="muted">Buena Esperanza, San Luis, Argentina.</p></div><div class="footer-links"><a class="pill" href={settings.storeUrl} target="_blank" rel="noopener noreferrer">Nuestra tienda ↗</a><a class="pill outline" href={settings.instagramUrl} target="_blank" rel="noopener noreferrer">Instagram ↗</a></div></div><div class="footer-bottom"><span>© {new Date().getFullYear()} Pipí Cucú — Pintura decorativa</span><span>Las compras se realizan de forma externa en Empretienda.</span></div></div></footer>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <img class="footer-logo" src={settings.logoUrl} alt="Logo de Pipí Cucú, pintura decorativa" width="132" height="139" loading="lazy" />
+      <div class="footer-copy">
+        <h2 class="footer-title"><Emphasis text={settings.footerTitle} /></h2>
+        <p>{settings.footerText}</p>
+        <div class="footer-cta"><a class="btn" href={settings.storeUrl} target="_blank" rel="noopener noreferrer">{settings.footerButtonLabel} <Icon name="arrow-up-right" /><span class="sr-only">(abre en otra pestaña)</span></a></div>
+      </div>
+      <nav aria-label="Pie de página">
+        <ul class="footer-links">
+          <li><a href="/productos/">Obras</a></li>
+          <li><a href="/#nosotras">Nosotras</a></li>
+          <li><a href="/#personalizados">Personalizados</a></li>
+          <li><a href="/novedades/">Novedades</a></li>
+          <li><a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer"><Icon name="instagram" /> Instagram<span class="sr-only">(abre en otra pestaña)</span></a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <span>© {new Date().getFullYear()} Pipí Cucú — Pintura decorativa</span>
+      <span>{settings.footerNote}</span>
+    </div>
+  </div>
+</footer>

@@ -1,6 +1,61 @@
 ---
-import SiteLayout from '../../layouts/SiteLayout.astro';import {getWorks,getSettings,shopLink,usingDemo} from '../../lib/content';import type {Work} from '../../data/demo';
-export async function getStaticPaths(){const works=await getWorks();return works.filter(x=>x.slug).map(work=>({params:{slug:work.slug},props:{work}}));}
-const {work}=Astro.props as {work:Work};const settings=await getSettings();
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import SpecimenLabel from '../../components/SpecimenLabel.astro';
+import Icon from '../../components/Icon.astro';
+import { plateNumber, plateTransitionName } from '../../components/plates';
+import { getWorks, getSettings, shopLink, usingDemo } from '../../lib/content';
+import type { Work } from '../../data/demo';
+export async function getStaticPaths() {
+  const works = await getWorks();
+  const published = works.filter((w) => w.slug);
+  return published.map((work, i) => ({
+    params: { slug: work.slug },
+    props: { work, number: plateNumber(works, work), prev: published[i - 1], next: published[i + 1] },
+  }));
+}
+interface Props { work: Work; number: string; prev?: Work; next?: Work; }
+const { work, number, prev, next } = Astro.props;
+const settings = await getSettings();
+const extra = (work.images || []).filter(Boolean);
 ---
-<SiteLayout title={`${work.title} | Pipí Cucú`} description={work.description}><div class="wrap"><div class="product-details"><div><img src={work.image} alt={work.title}/>{(work.images||[]).filter(Boolean).map((img)=><img src={img} alt={`${work.title}, otra vista`} loading="lazy" style="margin-top:15px"/>)}</div><div><a class="text-link" href="/productos/">← Volver a obras</a><p class="eyebrow muted" style="margin-top:35px">{work.category}</p><h1>{work.title}</h1><p>{work.description}</p>{work.technique&&<p><strong>Técnica:</strong> {work.technique}</p>}{work.dimensions&&<p><strong>Medidas:</strong> {work.dimensions}</p>}{usingDemo&&<p class="notice">Ficha ilustrativa. Confirmá precios y disponibilidad en la tienda.</p>}<a class="pill" href={shopLink(work,settings)} target="_blank" rel="noopener noreferrer">{work.externalUrl?'Ver en la tienda':'Explorar tienda online'} ↗</a><p style="font-size:12px">El pago y el envío se gestionan fuera de este sitio.</p></div></div></div></SiteLayout>
+<SiteLayout title={`${work.title} | Pipí Cucú`} description={work.description}>
+  <article class="ficha field">
+    <div class="wrap">
+      <a class="back-link" href="/productos/"><Icon name="arrow-left" /> Volver al herbario</a>
+      <div class="ficha-grid">
+        <div>
+          <figure class="plate ficha-plate" style="margin:0">
+            <div class="mount">
+              <div class="window">
+                <span class="photo" style={`view-transition-name: ${plateTransitionName(work.slug)}`}><img src={work.image} alt={work.description || work.title} fetchpriority="high" decoding="async" /></span>
+              </div>
+            </div>
+          </figure>
+          {extra.length > 0 && (
+            <div class="extra-views">
+              {extra.map((img, i) => (
+                <figure class="plate" style="margin:0">
+                  <div class="mount"><div class="window"><span class="photo"><img src={img} alt={`${work.title}, vista ${i + 2}`} loading="lazy" decoding="async" /></span></div></div>
+                </figure>
+              ))}
+            </div>
+          )}
+        </div>
+        <div class="ficha-side">
+          <h1>{work.title}</h1>
+          <SpecimenLabel work={work} number={number} showTitle={false} class="ficha-label" />
+          {work.description && <p class="ficha-desc">{work.description}</p>}
+          {usingDemo && <p class="demo-note">Ficha ilustrativa. Confirmá precio y disponibilidad en la tienda.</p>}
+          <a class="btn btn-ink" href={shopLink(work, settings)} target="_blank" rel="noopener noreferrer">{work.externalUrl ? 'Ver esta obra en la tienda' : 'Ir a la tienda'} <Icon name="arrow-up-right" /><span class="sr-only">(abre en otra pestaña)</span></a>
+          <p class="ficha-fine">Precio, pago y envío se gestionan en Empretienda.</p>
+        </div>
+      </div>
+      {(prev || next) && (
+        <nav class="pager" aria-label="Otras láminas">
+          {prev && <a href={`/productos/${prev.slug}/`}><small>Lámina anterior</small><span>{prev.title}</span></a>}
+          {next && <a href={`/productos/${next.slug}/`}><small>Lámina siguiente</small><span>{next.title}</span></a>}
+        </nav>
+      )}
+    </div>
+  </article>
+</SiteLayout>

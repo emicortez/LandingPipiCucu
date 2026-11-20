@@ -1,4 +1,22 @@
 ---
-import SiteLayout from '../../layouts/SiteLayout.astro';import WorkGrid from '../../components/WorkGrid.astro';import {getWorks,usingDemo} from '../../lib/content';const works=await getWorks();
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import WorkGrid from '../../components/WorkGrid.astro';
+import { getWorks, getSettings, usingDemo } from '../../lib/content';
+const [works, settings] = await Promise.all([getWorks(), getSettings()]);
 ---
-<SiteLayout title="Catálogo de obras | Pipí Cucú"><section class="page-intro"><div class="wrap"><span class="eyebrow muted">Pipí Cucú / Catálogo visual</span><h1>Nuestras <em>obras.</em></h1><p>Un espacio para descubrir nuestras creaciones. Explorá pinturas, detalles y piezas hechas a mano. Las compras se finalizan en la tienda externa.</p>{usingDemo && <p class="notice">Catálogo de ejemplo basado en las fotos recibidas. Los nombres y categorías son orientativos; el inventario comercial se administra por separado en Empretienda.</p>}</div></section><section class="section-pad" style="padding-top:30px"><div class="wrap"><WorkGrid works={works} showFilters={true}/></div></section></SiteLayout>
+<SiteLayout title="Catálogo de obras | Pipí Cucú" description="Todas las obras de Pipí Cucú, pintadas a mano por Deby y Agos. Filtrá por categoría o buscá una obra.">
+  <div class="field">
+    <section class="page-intro" aria-labelledby="catalog-title">
+      <div class="wrap">
+        <h1 id="catalog-title">El <em>herbario</em> de obras</h1>
+        <p class="lede">Cada obra, montada como una lámina. Abrí la que te guste para ver su ficha completa; la compra se hace en nuestra tienda.</p>
+        {usingDemo && <p class="demo-note">Catálogo de ejemplo con las fotos recibidas. Los nombres y categorías son orientativos; el inventario comercial está en Empretienda.</p>}
+      </div>
+    </section>
+    <section class="section" style="padding-top:0" aria-label="Obras">
+      <div class="wrap">
+        <WorkGrid works={works} settings={settings} showFilters={true} />
+      </div>
+    </section>
+  </div>
+</SiteLayout>

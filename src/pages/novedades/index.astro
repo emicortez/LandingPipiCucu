@@ -1,4 +1,41 @@
 ---
-import SiteLayout from '../../layouts/SiteLayout.astro';import {getNews,getSettings} from '../../lib/content';const [news,settings]=await Promise.all([getNews(),getSettings()]);
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { getNews, getSettings } from '../../lib/content';
+const [news, settings] = await Promise.all([getNews(), getSettings()]);
+const dateFmt = new Intl.DateTimeFormat('es-AR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 ---
-<SiteLayout title="Novedades | Pipí Cucú"><section class="page-intro"><div class="wrap"><span class="eyebrow muted">Pipí Cucú / Novedades</span><h1>Lo que está <em>pasando.</em></h1><p>Últimas piezas, noticias y anuncios del atelier.</p></div></section><section class="section-pad" style="padding-top:20px"><div class="wrap">{news.length===0?<div class="notice">Todavía no hay novedades publicadas. Seguinos en <a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer"><u>Instagram</u></a> para conocer nuestros trabajos.</div>:news.map(n=><a class="news-card" href={`/novedades/${n.slug}/`}><span class="eyebrow muted">{n.publishedAt?.slice(0,10)||'Novedad'}</span><div><h2>{n.title}</h2><p>{n.excerpt}</p></div><span>↗</span></a>)}</div></section></SiteLayout>
+<SiteLayout title="Novedades | Pipí Cucú">
+  <section class="page-intro field" aria-labelledby="news-title">
+    <div class="wrap">
+      <h1 id="news-title">Novedades del <em>taller</em></h1>
+      <p class="lede">Obras nuevas, noticias y anuncios de Pipí Cucú.</p>
+    </div>
+  </section>
+  <section class="section board">
+    <div class="wrap">
+      {news.length === 0 ? (
+        <div class="empty">
+          <h2>Todavía no hay novedades.</h2>
+          <p>Mientras tanto, mirá las obras o seguinos en Instagram para ver lo último que pintamos.</p>
+          <div class="actions">
+            <a class="btn btn-ink" href="/productos/">Ver las obras <Icon name="arrow-right" /></a>
+            <a class="btn btn-line" href={settings.instagramUrl} target="_blank" rel="noopener noreferrer"><Icon name="instagram" /> Instagram<span class="sr-only">(abre en otra pestaña)</span></a>
+          </div>
+        </div>
+      ) : (
+        <ul class="news-list">
+          {news.map((n) => (
+            <li class="news-item">
+              <a href={`/novedades/${n.slug}/`}>
+                <span class="news-meta">{n.publishedAt ? <time datetime={n.publishedAt}>{dateFmt.format(new Date(n.publishedAt))}</time> : <span class="news-date">Novedad</span>}</span>
+                <div><h2 style="font-size:clamp(1.4rem,2.6vw,2rem)">{n.title}</h2>{n.excerpt && <p>{n.excerpt}</p>}</div>
+                <Icon name="arrow-right" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+</SiteLayout>

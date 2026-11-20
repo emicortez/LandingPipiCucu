@@ -1,6 +1,29 @@
 ---
-import SiteLayout from '../../layouts/SiteLayout.astro';import {getNews} from '../../lib/content';import type {News} from '../../data/demo';
-export async function getStaticPaths(){const news=await getNews();return news.filter(n=>n.slug).map(news=>({params:{slug:news.slug},props:{news}}));}
-const {news}=Astro.props as {news:News};
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { getNews } from '../../lib/content';
+import type { News } from '../../data/demo';
+export async function getStaticPaths() {
+  const news = await getNews();
+  return news.filter((n) => n.slug).map((news) => ({ params: { slug: news.slug }, props: { news } }));
+}
+const { news } = Astro.props as { news: News };
+const dateFmt = new Intl.DateTimeFormat('es-AR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 ---
-<SiteLayout title={`${news.title} | Pipí Cucú`} description={news.excerpt}><section class="page-intro"><div class="wrap"><a class="text-link" href="/novedades/">← Novedades</a><p class="eyebrow muted" style="margin-top:35px">{news.publishedAt?.slice(0,10)}</p><h1>{news.title}</h1><p>{news.excerpt}</p>{news.image&&<img src={news.image} alt={news.title} style="max-height:600px;max-width:800px;object-fit:contain"/>}{news.body&&<p style="white-space:pre-line;max-width:800px">{news.body}</p>}{news.externalUrl&&<a class="pill" href={news.externalUrl} target="_blank" rel="noopener noreferrer">Más información ↗</a>}</div></section></SiteLayout>
+<SiteLayout title={`${news.title} | Pipí Cucú`} description={news.excerpt}>
+  <article class="page-intro board">
+    <div class="wrap article">
+      <a class="back-link" href="/novedades/"><Icon name="arrow-left" /> Novedades</a>
+      {news.publishedAt && <p class="news-item"><time datetime={news.publishedAt}>{dateFmt.format(new Date(news.publishedAt))}</time></p>}
+      <h1>{news.title}</h1>
+      {news.excerpt && <p class="lede">{news.excerpt}</p>}
+      {news.image && (
+        <figure class="plate article-figure">
+          <div class="mount"><div class="window"><span class="photo"><img src={news.image} alt={news.title} decoding="async" /></span></div></div>
+        </figure>
+      )}
+      {news.body && <p class="article-body">{news.body}</p>}
+      {news.externalUrl && <a class="btn btn-ink" href={news.externalUrl} target="_blank" rel="noopener noreferrer">Más información <Icon name="arrow-up-right" /><span class="sr-only">(abre en otra pestaña)</span></a>}
+    </div>
+  </article>
+</SiteLayout>
