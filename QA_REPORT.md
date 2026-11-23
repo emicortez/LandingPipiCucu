@@ -64,3 +64,7 @@ Son mediciones locales sin CDN: orientativas, no reemplazan datos reales (CrUX /
 | Vitals de laboratorio (móvil / desktop) | Home LCP 976 / 1056 ms · catálogo 1592 / 1808 ms · ficha 832 / 812 ms · CLS ≤ 0,039 |
 
 Defectos encontrados y corregidos en esta ronda: overflow de la nota de la ficha en 320/1024 px; estilos con scope de Astro que no alcanzaban a componentes hijos (notas, fotos de nosotras y novedades); colecciones sin material en reposo; racimo de obras con huecos; nota "Deby y Agos" pisando la foto; botones del hero que empujaban las obras fuera del primer viewport en móvil.
+
+## Ronda 3 — "La mesa viva" y Colecciones (2026-11-23)
+
+Pedido: titular más chico, Colecciones más linda y un efecto "WAAAU" (Impeccable `overdrive`, dirección elegida por la usuaria). E2E **83/83** (incluye 2 tests nuevos: arrastrar una foto 200 px no navega y un click la abre; cada foto de la mesa es un enlace con alt). Detector 0. LCP de laboratorio home 1,16 s móvil / 1,22 s desktop, CLS ≤ 0,05. Revisión de cierre: fix (flecha que no apuntaba a una foto; foto del gato tapada) → **ship**. Limitación: el arrastre y la inercia se verificaron por test y capturas, no en dispositivos reales.

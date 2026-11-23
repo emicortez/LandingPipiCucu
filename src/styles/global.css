@@ -60,6 +60,7 @@
   --step-3: clamp(1.9rem, 1.4rem + 2.3vw, 3.4rem);
   --step-4: clamp(2.4rem, 1.5rem + 3.8vw, 5rem);
   --step-5: clamp(2.6rem, 1.4rem + 4.9vw, 6rem);
+  --step-hero: clamp(2.1rem, 1.4rem + 2.6vw, 4rem); /* home headline on its paper note */
   --step-hand: clamp(1.6rem, 1.3rem + 1vw, 2.2rem);
 
   /* Space */
@@ -174,6 +175,7 @@ input { caret-color: var(--accent); }
   box-shadow: 0 1px 1px color-mix(in srgb, var(--color-plum) 10%, transparent);
   pointer-events: none;
 }
+.print.is-held { box-shadow: var(--shadow-lifted); }
 .print--corner::before { left: auto; right: -1.4rem; top: 0.6rem; translate: 0 0; rotate: 38deg; }
 .art-link { display: block; text-decoration: none; }
 .art-link:hover .print, .art-link:focus-visible .print { transform: rotate(0deg) translateY(-6px) scale(1.015); box-shadow: var(--shadow-lifted); }

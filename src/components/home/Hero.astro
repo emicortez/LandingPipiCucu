@@ -1,4 +1,10 @@
 ---
+/**
+ * "La mesa viva": the first screen is the workshop table. The works lie all over it as
+ * taped prints; the headline sits on a paper note that always stays on top. With a mouse,
+ * visitors can pick up and throw the prints (live-table.ts); everything is a plain link
+ * without JavaScript.
+ */
 import Print from '../ui/Print.astro';
 import HandNote from '../ui/HandNote.astro';
 import Icon from '../ui/Icon.astro';
@@ -6,72 +12,82 @@ import type { Artwork, HomePage, SiteSettings } from '../../types/content';
 
 interface Props { home: HomePage; settings: SiteSettings; works: Artwork[]; }
 const { home, settings, works } = Astro.props;
-// The table: the hero work largest, two more prints overlapping its lower corners.
-const [main, left, right] = works;
+// Each slot: tilt of the print and its depth (how much it follows the cursor and the scroll).
+const slots = [
+  { tilt: -6, depth: 1.1 },
+  { tilt: 5, depth: 0.7 },
+  { tilt: 3.5, depth: 0.9 },
+  { tilt: -4.5, depth: 1.25 },
+  { tilt: 7, depth: 0.55 },
+  { tilt: -3, depth: 0.8 },
+];
+const laid = works.slice(0, slots.length);
 ---
-<section class="hero" aria-labelledby="hero-title">
-  <div class="wrap hero-grid">
-    <div class="hero-copy">
-      <h1 id="hero-title" class="t-display">{home.heroTitle}</h1>
+<section class="hero" aria-labelledby="hero-title" data-live-table>
+  <div class="note-wrap">
+    <div class="paper taped note">
+      <h1 id="hero-title" class="hero-title">{home.heroTitle}</h1>
       <p class="lede hero-lede" data-hero-fade>{home.heroDescription}</p>
       <div class="actions" data-hero-fade>
         <a class="btn" href="/productos/">Ver el catálogo <Icon name="arrow-right" /></a>
         <a class="btn btn--line" href={settings.storeUrl} rel="noopener" target="_blank" data-track="store_click" data-track-label="hero">Tienda online <Icon name="arrow-up-right" /><span class="sr-only">(se abre en otra pestaña)</span></a>
       </div>
     </div>
+    <HandNote class="drag-hint" text="agarrá una foto" arrow="right" />
+  </div>
 
-    {main && (
-      <div class="table">
-        <a class="art-link slot slot--main" href={`/productos/${main.slug}/`} data-track="artwork_click" data-track-label={`hero:${main.slug}`}>
-          <Print image={main.images[0]} sizes="(min-width: 64rem) 26vw, 58vw" tilt={-1.8} priority data-lay />
+  <div class="prints">
+    {laid.map((work, i) => (
+      <div class={`slot slot--${i + 1}`} data-slot data-depth={slots[i].depth}>
+        <a class="art-link drag" href={`/productos/${work.slug}/`} data-drag data-track="artwork_click" data-track-label={`hero:${work.slug}`}>
+          <Print image={work.images[0]} sizes="(min-width: 64rem) 20vw, 44vw" tilt={slots[i].tilt} priority={i === 0} data-lay data-tilt={slots[i].tilt} />
         </a>
-        {left && (
-          <a class="art-link slot slot--left" href={`/productos/${left.slug}/`} data-track="artwork_click" data-track-label={`hero:${left.slug}`}>
-            <Print image={left.images[0]} sizes="(min-width: 64rem) 15vw, 36vw" tilt={-3} tape="corner" data-lay />
-          </a>
-        )}
-        {right && (
-          <a class="art-link slot slot--right" href={`/productos/${right.slug}/`} data-track="artwork_click" data-track-label={`hero:${right.slug}`}>
-            <Print image={right.images[0]} sizes="(min-width: 64rem) 16vw, 38vw" tilt={2.6} data-lay />
-          </a>
-        )}
-        <HandNote class="table-note" text="pintado a mano" arrow="down-right" />
       </div>
-    )}
+    ))}
   </div>
 </section>
 
 <style>
-  .hero { padding-block: clamp(1.5rem, 3vw, 2.5rem) clamp(3.5rem, 7vw, 6rem); min-height: calc(100svh - var(--header-h)); display: flex; align-items: center; }
-  .hero-grid { display: grid; gap: clamp(3rem, 8vw, 4rem); align-items: center; width: 100%; }
-  .hero-copy { display: grid; gap: clamp(1.25rem, 2.5vw, 2rem); position: relative; z-index: 3; }
-  .hero-copy h1 { max-width: 14ch; }
-  .hero-lede { max-width: 38rem; color: var(--color-ink); }
+  .hero { position: relative; display: grid; padding-block: clamp(1.5rem, 4vw, 2.5rem) clamp(3rem, 6vw, 4rem); overflow: clip; }
+  .note-wrap { position: relative; z-index: 50; width: min(100% - 2 * var(--gutter), 40rem); margin-inline: auto; }
+  .note { --tilt: -0.6deg; rotate: -0.6deg; display: grid; gap: clamp(1rem, 2vw, 1.5rem); padding: clamp(1.75rem, 4vw, 3rem); box-shadow: var(--shadow-lifted); }
+  .hero-title { font-size: var(--step-hero); line-height: 1.02; letter-spacing: -0.02em; }
+  .hero-lede { color: var(--color-ink); }
+  .note .actions .btn { padding-inline: 1.1rem; }
+  .note-wrap :global(.drag-hint) { display: none; }
 
-  /* The table: prints positioned as fractions of a fixed-ratio area, so they keep their
-     overlap at every width. Each print keeps its own aspect ratio. */
-  .table { position: relative; aspect-ratio: 1 / 1.02; width: 100%; max-width: 40rem; justify-self: center; }
+  /* Phones and tablets: the note first, then a smaller scatter of prints below it. */
+  .prints { position: relative; aspect-ratio: 1 / 0.95; width: min(100% - 2 * var(--gutter), 34rem); margin: 2.5rem auto 0; }
   .slot { position: absolute; }
-  .slot--main { left: 20%; top: 4%; width: 58%; z-index: 2; }
-  .slot--left { left: 0; bottom: 3%; width: 36%; z-index: 3; }
-  .slot--right { right: 0; bottom: 0; width: 38%; z-index: 1; }
-  .table :global(.table-note) { position: absolute; left: -2%; top: 6%; z-index: 4; }
+  .slot--1 { left: 0; top: 2%; width: 46%; z-index: 2; }
+  .slot--2 { right: 0; top: 0; width: 44%; z-index: 1; }
+  .slot--3 { left: 14%; bottom: 0; width: 40%; z-index: 3; }
+  .slot--4 { right: 2%; bottom: 4%; width: 38%; z-index: 4; }
+  .slot--5, .slot--6 { display: none; }
+  .prints :global(.print img) { max-height: 46svh; width: auto; margin-inline: auto; }
 
-  @media (max-width: 39.99rem) {
-    .hero-grid { gap: 2.5rem; }
-    .hero-copy .actions .btn { padding-inline: 1.1rem; }
-    .table { aspect-ratio: 1 / 1.12; }
-    .table :global(.table-note) { left: -1%; top: -1rem; }
-  }
+  /* Desktop: the whole first screen is the table; the note floats in the middle. */
   @media (min-width: 64rem) {
-    .hero-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 2rem; }
-    .hero-copy { grid-column: 1 / span 6; }
-    .table { grid-column: 7 / span 6; max-width: none; }
-    .table :global(.table-note) { left: -4%; top: 2%; }
+    .hero { min-height: calc(100svh - var(--header-h)); place-items: center; padding-block: 3rem; }
+    .note-wrap { width: min(44vw, 40rem); }
+    .note-wrap :global(.drag-hint) { position: absolute; right: -7.25rem; bottom: calc(100% + 0.5rem); }
+    .prints { position: absolute; inset: 0; width: auto; margin: 0; aspect-ratio: auto; }
+    .slot--1 { left: 2.5%; top: 7%; width: 17vw; }
+    .slot--2 { right: 3%; top: 5%; width: 18vw; }
+    .slot--3 { left: 5%; top: auto; bottom: 5%; width: 16vw; }
+    .slot--4 { right: 6%; bottom: 3%; width: 17vw; }
+    .slot--5 { display: block; left: 20%; top: 2%; width: 12vw; z-index: 1; }
+    .slot--6 { display: block; right: 20%; bottom: 0; width: 12vw; z-index: 1; }
+    .prints :global(.print img) { max-height: 40svh; }
+  }
+  @media (min-width: 64rem) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .note-wrap :global(.drag-hint) { display: inline-flex; }
+    .drag { cursor: grab; }
+    .drag:active { cursor: grabbing; }
   }
 </style>
 
 <script>
-  import { layTheTable } from '../../scripts/motion/hero';
-  layTheTable();
+  import { initLiveTable } from '../../scripts/motion/live-table';
+  initLiveTable();
 </script>

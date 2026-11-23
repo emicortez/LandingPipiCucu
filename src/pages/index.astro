@@ -14,8 +14,10 @@ const [settings, home, works, categories, news] = await Promise.all([getSettings
 // Hero: the chosen work, else the first featured one, else the first in the catalog.
 const heroWork = works.find((w) => w.slug === home.heroArtworkSlug) ?? works.find((w) => w.featured) ?? works[0];
 const others = works.filter((w) => w !== heroWork);
-// Two more prints share the hero table with the chosen work.
-const tableWorks = [heroWork, ...pickFeatured(others, home.featuredArtworkSlugs, 2)].filter((w) => w !== undefined);
+// The hero table holds up to six prints: the chosen work, the home selection or featured
+// works, then the rest of the catalog.
+const picked = pickFeatured(others, home.featuredArtworkSlugs, 5);
+const tableWorks = [heroWork, ...picked, ...others.filter((w) => !picked.includes(w))].filter((w) => w !== undefined).slice(0, 6);
 // "Obras del taller" avoids repeating the table's prints when the catalog is big enough.
 const fresh = others.filter((w) => !tableWorks.includes(w));
 const featured = pickFeatured(fresh.length >= 3 ? fresh : others, home.featuredArtworkSlugs, 4);
@@ -25,7 +27,11 @@ const shownCategories = home.featuredCategorySlugs.length
   : categories;
 const collectionItems = shownCategories.map((category) => {
   const inCategory = works.filter((w) => w.category?.slug === category.slug);
-  return { category, count: inCategory.length, image: category.cover ?? inCategory[0]?.images[0] };
+  // Up to three real works fanned on the card; the category cover leads when the owners set one.
+  const candidates = [category.cover, ...inCategory.map((w) => w.images[0])].filter((i) => i !== undefined);
+  // The cover is often one of the works' own photos: never show the same picture twice.
+  const images = candidates.filter((img, i) => candidates.findIndex((o) => o.src === img.src) === i).slice(0, 3);
+  return { category, count: inCategory.length, images };
 });
 ---
 <BaseLayout image={heroWork?.images[0]}>

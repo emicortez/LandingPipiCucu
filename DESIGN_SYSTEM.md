@@ -36,7 +36,8 @@ Bodoni Moda (titulares, didone como el monograma) · Jost (texto e interfaz) · 
 
 ## Movimiento
 
-- **Al cargar (≥1024 px):** las tres fotos del hero se "apoyan" en la mesa, una tras otra. El titular nunca se oculta (es el LCP).
+- **"La mesa viva" (hero, ≥1024 px, mouse):** la primera pantalla es la mesa con hasta 6 fotos. Se pueden agarrar y tirar (GSAP Draggable + Inertia), siguen al cursor en profundidad y se deslizan fuera al bajar. Un click sin arrastre abre la obra. Al cargar, las fotos se apoyan una por una; el titular, en su tarjeta de papel, nunca se oculta (es el LCP). En celular: tarjeta primero y cuatro fotos debajo, sin arrastre.
+- **Colecciones:** tarjetas de papel; la categoría con obras abre sus fotos en abanico.
 - **Hover/foco:** cada foto se endereza y se levanta.
 - **Scroll:** la definición de "pipí cucú" pasa de rosa a tinta.
 - **Filtros del catálogo:** las obras se reacomodan con Flip.

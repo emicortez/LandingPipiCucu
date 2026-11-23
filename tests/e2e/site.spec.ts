@@ -214,3 +214,33 @@ test.describe('navigation and accessibility', () => {
     expect(hidden).toBe(0);
   });
 });
+
+test.describe('la mesa viva (hero)', () => {
+  test('a print can be picked up and thrown without leaving the page; a click still opens it', async ({ page }, info) => {
+    test.skip(info.project.name !== 'desktop', 'dragging is a fine-pointer, desktop-only enhancement');
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    await expect(page.locator('html')).not.toHaveClass(/motion-pending/, { timeout: 3000 });
+    await page.waitForTimeout(1600);
+    const handle = page.locator('[data-drag]').first();
+    const box = (await handle.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width / 2 + 200, box.y + box.height / 2 + 100, { steps: 10 });
+    await page.mouse.up();
+    await expect(page).toHaveURL(/\/$/);
+    expect(await handle.evaluate((el) => getComputedStyle(el).transform)).not.toBe('none');
+    await page.locator('[data-drag]').nth(1).click();
+    await expect(page).toHaveURL(/\/productos\/[^/]+\/$/);
+  });
+
+  test('every print on the table is a working link with an accessible name', async ({ page }) => {
+    await page.goto('/');
+    const links = page.locator('[data-drag]');
+    expect(await links.count()).toBeGreaterThanOrEqual(3);
+    for (const link of await links.all()) {
+      await expect(link).toHaveAttribute('href', /^\/productos\/.+\/$/);
+      expect((await link.locator('img').getAttribute('alt'))?.length ?? 0).toBeGreaterThan(10);
+    }
+  });
+});

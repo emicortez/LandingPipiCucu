@@ -14,6 +14,12 @@ colors:
   ivory: "#f8f4f1"
   stone-light: "#c2b8bb"
 typography:
+  hero:
+    fontFamily: "Bodoni Moda Variable, Bodoni 72, Didot, Georgia, serif"
+    fontSize: "clamp(2.1rem, 1.4rem + 2.6vw, 4rem)"
+    fontWeight: 500
+    lineHeight: 1.02
+    letterSpacing: "-0.02em"
   display:
     fontFamily: "Bodoni Moda Variable, Bodoni 72, Didot, Georgia, serif"
     fontSize: "clamp(2.6rem, 1.4rem + 4.9vw, 6rem)"
@@ -180,7 +186,7 @@ A monochrome rose family with charcoal ink: the palette is the logo's field take
 **Character:** A high-contrast Didone at weight 500 with optical sizing does the talking at scale, matching the monogram; Jost keeps reading text calm and geometric. The pencil hand is a third voice used only for annotation.
 
 ### Hierarchy
-- **Display** (500, clamp 2.6rem–6rem, 0.98, -0.025em): the home hero headline, max 14ch.
+- **Display** (500, clamp 2.6rem–6rem, 0.98, -0.025em): page-level display (nosotras, 404). The home hero headline is set smaller (clamp 2.1rem–4rem) on its paper note, because the prints carry the scale.
 - **Headline** (500, clamp 2.4rem–5rem, 1.04): section heads and page H1s (`.t-1`, `.section-head h2`). `--step-3` (clamp 1.9rem–3.4rem) serves intermediate heads and step numerals.
 - **Title** (500, clamp 1.45rem–2.2rem, 1.04): card and step headings, prose H2.
 - **Art Title** (500, clamp 1.18rem–1.45rem, 1.2): the name under each print, in Bodoni.
@@ -198,7 +204,7 @@ A monochrome rose family with charcoal ink: the palette is the logo's field take
 
 A single centred container (max 90rem) with a fluid gutter (clamp 1rem–4rem). Sections breathe with a fluid vertical rhythm (clamp 4.5rem–10rem). From 64rem, compositions use a 12-column grid with a 2rem column gap: copy typically spans 6 columns, the collage or paper stack the opposite side. Breakpoints: 40rem, 48rem, 64rem, 90rem.
 
-Collages are positioned as fractions of a fixed-aspect area (the hero table is roughly 1 : 1.02), so prints keep their overlap at every width. The catalog is a 1 / 2 / 3 column grid, aligned to start, with generous row gaps (clamp 2.5rem–4rem); tall works cap at 70svh so rows stay readable. Prints in a grid take deterministic, uneven tilts from a fixed sequence (-2.2, 1.6, -1, 2.4, -2.8, 0.8, 1.9, -1.6 degrees), never a repeating pattern. Paper steps are offset with small left margins and individual rotations. On phones everything stacks: headline, actions, then the prints in a short overlapping stack.
+The home hero is the whole table: from 64rem, prints are absolutely positioned toward the viewport edges (widths 12–18vw, max-height 40svh) around a centred paper note that always stays on top; below 64rem the note comes first and four prints overlap in a fixed-aspect area beneath it. The catalog is a 1 / 2 / 3 column grid, aligned to start, with generous row gaps (clamp 2.5rem–4rem); tall works cap at 70svh so rows stay readable. Prints in a grid take deterministic, uneven tilts from a fixed sequence (-2.2, 1.6, -1, 2.4, -2.8, 0.8, 1.9, -1.6 degrees), never a repeating pattern. Paper steps are offset with small left margins and individual rotations. On phones everything stacks: headline, actions, then the prints in a short overlapping stack.
 
 The header is sticky (4.5rem) on the table colour, gaining a hairline and soft shadow once scrolled.
 
@@ -260,7 +266,7 @@ On each work's page: up to five dominant colours sampled at build time from the 
 A small paper tag: paper white, 1px plum hairline, label size plum text.
 
 ### Motion
-One ease (`cubic-bezier(0.22, 1, 0.36, 1)`) with 180ms for state and 380ms for reveals; print lift uses 520ms. The signature load moment lays the hero prints on the table one by one from 64rem (drop from 46px above with extra rotation and 1.08 scale, settling on `expo.out` over 1.05s, staggered 0.16s); the headline is never hidden and is the LCP element. On fine pointers, the collections index floats a category preview beside the pointer. Everything is transform, opacity and shadow, and all of it switches off under reduced motion.
+One ease (`cubic-bezier(0.22, 1, 0.36, 1)`) with 180ms for state and 380ms for reveals; print lift uses 520ms. The signature load moment lays the hero prints on the table one by one from 64rem (drop from 46px above with extra rotation and 1.08 scale, settling on `expo.out` over 1.05s, staggered 0.16s); the headline is never hidden and is the LCP element. On fine pointers the hero is "la mesa viva": prints can be dragged and thrown (GSAP Draggable + InertiaPlugin, bounded to the hero, lift while held, elastic settle), drift with the cursor by depth, and slide off the table on scroll (ScrollTrigger scrub); a click without movement still opens the work. Collections are paper cards: a category with works fans up to three prints like a hand of cards. Everything is transform, opacity and shadow, and all of it switches off under reduced motion.
 
 ## Do's and Don'ts
 

@@ -17,6 +17,7 @@ Branch: `feat/pipicucu-v1`. Delivery: ask-on-risk, work-unit commits. Test runne
 - S10 (brief §17): Playwright e2e + visual captures + axe; "No afirmar que una prueba se ejecutó si no fue ejecutada."
 - S11 (brief §20): docs `README.md`, `SPECIFICATIONS.md`, `ARCHITECTURE.md`, `DESIGN_SYSTEM.md`, `SEO_CHECKLIST.md`, `CMS_GUIDE.md`, `DEPLOYMENT.md`, `QA_REPORT.md`, `.env.example`, `CLAUDE.md`.
 - S12 (2026-11-23): "no es tan linda la pagina, usar impecable para mejorar los esitlos y las skills q tengas" — direction chosen: "Taller cálido / collage" ("fotos que se superponen como sobre una mesa de trabajo, rosa protagonista, detalles manuscritos y papel. Más color y calidez.").
+- S13 (2026-11-23): "muy grande la parte del texto: Pintamos recuerdos, historias y lugares que merecen permanecer." / "esta seccion no me gusta mucho, no quedo tan linda, la q dice coleccines" / "es linda la pagina, pero no me da sesacion de WAAAUUUU! q buena esta la pagina, tendria q dar esa sesacion, q linda es" — overdrive direction chosen: "La mesa viva".
 
 ## Tasks
 
@@ -29,6 +30,7 @@ Branch: `feat/pipicucu-v1`. Delivery: ask-on-risk, work-unit commits. Test runne
 - T7 (S10): Playwright + axe tests, screenshots at 320/390/768/1024/1440/1920, fixes. Route: inline. Status: done (80/80 e2e, captures reviewed, lab vitals). 
 - T8 (S11): Documentation set. Route: inline. Status: done except `.env.example` (permission-protected; values in DEPLOYMENT.md).
 - T9 (S12): Replace the visual world with "Taller cálido / collage" following Impeccable new-work (pinned direction, code-led, no image generation); finish review + DESIGN.md. Route: inline (finish reviewer + documenter delegated per Impeccable). Status: done — reviewer verdict ship (scoped to scored fixes), DESIGN.md + .impeccable/design.json written, e2e 80/80.
+- T10 (S13): Smaller hero headline, Colecciones as paper cards with fanned prints, "La mesa viva" hero (drag/throw, depth, scroll exit). Route: inline. Status: done — reviewer ship, e2e 83/83.
 
 ## Log
 
@@ -40,3 +42,4 @@ Branch: `feat/pipicucu-v1`. Delivery: ask-on-risk, work-unit commits. Test runne
 - L6 next: owners to create Sanity project + load real catalog; vector logo; clean cat photo; confirm WhatsApp/domain; deploy to Cloudflare Pages; validate rich results; ESLint not configured.
 - L7 (2026-11-23): "no es tan linda la pagina, usar impecable para mejorar los esitlos y las skills q tengas"; answer: "Taller cálido / collage". Impeccable diagnosis: ivory ground + high-contrast serif = the most common AI-generated look; new world drenches the rose and removes ivory as ground.
 - L8 (2026-11-23): Impeccable finish review: recapture → fix (7) → fix (1 partial) → ship. Detector 0 after token alignment. Lab LCP home 976 ms mobile.
+- L9 (2026-11-23): S13 delivered; finish review fix (arrow target, cat print covered) → ship.
