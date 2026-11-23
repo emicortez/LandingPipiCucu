@@ -10,3 +10,6 @@ studio/dist/
 studio/.sanity/
 test-results/
 playwright-report/
+
+# Installed agent skills (reproducible from skills-lock.json)
+.claude/skills/
