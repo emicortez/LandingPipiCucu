@@ -1,7 +1,7 @@
 ---
-import ArtworkImage from '../ui/ArtworkImage.astro';
+import NewsCard from '../news/NewsCard.astro';
 import Icon from '../ui/Icon.astro';
-import { formatDate } from '../../lib/format';
+import { tiltFor } from '../../lib/tilt';
 import type { News } from '../../types/content';
 
 interface Props { news: News[]; }
@@ -11,28 +11,20 @@ const { news } = Astro.props;
   <section class="band news" aria-labelledby="news-title">
     <div class="wrap">
       <div class="section-head">
-        <h2 id="news-title">Novedades</h2>
+        <h2 id="news-title">Novedades del taller</h2>
         <a class="link" href="/novedades/">Ver todas <Icon name="arrow-right" /></a>
       </div>
       <ul class="news-list">
-        {news.slice(0, 3).map((n) => (
-          <li>
-            <a class="news-item art-link" href={`/novedades/${n.slug}/`}>
-              {n.cover && <ArtworkImage image={n.cover} alt="" sizes="(min-width: 64rem) 28vw, 100vw" />}
-              <time datetime={n.publishedAt}>{formatDate(n.publishedAt)}</time>
-              <h3 class="art-title">{n.title}</h3>
-              <p class="muted">{n.excerpt}</p>
-            </a>
-          </li>
-        ))}
+        {news.slice(0, 3).map((n, i) => <li><NewsCard item={n} tilt={tiltFor(i + 3)} /></li>)}
       </ul>
     </div>
   </section>
 )}
 
 <style>
-  .news-list { list-style: none; display: grid; gap: 3rem 2rem; }
-  .news-item { display: grid; gap: 0.75rem; }
-  .news-item time { font-size: var(--step--1); color: var(--text-muted); margin-top: 0.5rem; }
-  @media (min-width: 48rem) { .news-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .news-list { list-style: none; display: grid; gap: 3.5rem 2.5rem; }
+  @media (min-width: 48rem) {
+    .news-list { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
+    .news-list li:nth-child(2) { margin-top: 3rem; }
+  }
 </style>

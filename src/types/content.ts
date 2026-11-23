@@ -55,6 +55,8 @@ export interface Artwork {
   seo: Seo;
   /** Paint chips sampled at build time from the centre of the first photo (src/lib/palette.ts). */
   palette?: string[];
+  /** Fields holding placeholder values (local sample content only; see SAMPLE_CONTENT.md). */
+  sampleFields?: ('technique' | 'dimensions')[];
 }
 
 /** Portable Text subset rendered by RichText.astro (no raw HTML is ever rendered). */
@@ -83,6 +85,8 @@ export interface News {
   featured: boolean;
   externalUrl?: string;
   seo: Seo;
+  /** Placeholder post written for the site (local sample content only): noindex, tagged. */
+  sample?: boolean;
 }
 
 export interface ArtistProfile {

@@ -4,6 +4,7 @@ import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
 import ArtworkImage from '../../components/ui/ArtworkImage.astro';
 import RichText from '../../components/ui/RichText.astro';
 import Icon from '../../components/ui/Icon.astro';
+import SampleTag from '../../components/ui/SampleTag.astro';
 import { getNews } from '../../lib/content';
 import { formatDate } from '../../lib/format';
 import { article, breadcrumbList, type Crumb } from '../../lib/seo/jsonld';
@@ -25,19 +26,21 @@ const cover = item.seo.image ?? item.cover;
 const coverUrl = cover && typeof cover.src === 'string' ? cover.src : undefined;
 // A short post with no body is not worth its own indexable URL.
 const thin = item.content.length === 0;
+// Sample posts are placeholders: never indexed, never claimed as articles.
+const hidden = thin || Boolean(item.sample);
 ---
 <BaseLayout
   title={item.seo.title || item.title}
   description={item.seo.description || item.excerpt}
   image={cover}
   type="article"
-  noindex={thin}
-  jsonLd={[breadcrumbList(crumbs, site), article(item, site, coverUrl)]}
+  noindex={hidden}
+  jsonLd={hidden ? [breadcrumbList(crumbs, site)] : [breadcrumbList(crumbs, site), article(item, site, coverUrl)]}
 >
   <article class="post">
     <div class="wrap post-head">
       <Breadcrumbs crumbs={crumbs} />
-      <time datetime={item.publishedAt}>{formatDate(item.publishedAt)}</time>
+      <p class="post-date"><time datetime={item.publishedAt}>{formatDate(item.publishedAt)}</time>{item.sample && <SampleTag />}</p>
       <h1 class="t-1">{item.title}</h1>
       <p class="lede">{item.excerpt}</p>
     </div>
@@ -55,7 +58,7 @@ const thin = item.content.length === 0;
 <style>
   .post { padding-block: clamp(1rem, 2vw, 1.5rem) var(--section); }
   .post-head { display: grid; gap: 1.25rem; max-width: 60rem; margin-bottom: 3rem; }
-  .post-head time { color: var(--text-muted); font-size: var(--step--1); margin-top: 1.5rem; }
+  .post-date { color: var(--text-muted); font-size: var(--step--1); margin-top: 1.5rem; }
   .post :global(.post-cover) { max-width: 60rem; margin-bottom: 3rem; }
   .post-body { font-size: var(--step-1); line-height: 1.65; }
   .post-link, .post-back { margin-top: 2.5rem; }

@@ -13,6 +13,7 @@ import lunas from '../assets/works/lunas.webp';
 import gato from '../assets/works/gato.webp';
 import founders from '../assets/people/deby-y-agos.webp';
 import type { ImageMetadata } from 'astro';
+import { sampleNews, sampleSpecs } from './sample';
 
 const STORE = 'https://pipicucupc.empretienda.com.ar';
 const img = (meta: ImageMetadata, alt: string) => ({ src: meta, width: meta.width, height: meta.height, alt });
@@ -66,7 +67,10 @@ export const fallbackCategories: Category[] = [
 
 const cuadros = { name: 'Cuadros', slug: 'cuadros' };
 const work = (w: Omit<Artwork, 'tags' | 'featured' | 'customOrderAvailable' | 'seo' | 'category'> & Partial<Artwork>): Artwork => ({
-  tags: [], featured: false, customOrderAvailable: false, seo: {}, category: cuadros, ...w,
+  tags: [], featured: false, customOrderAvailable: false, seo: {}, category: cuadros,
+  // [demo] placeholder technique and size, tagged "muestra" on the page.
+  ...(sampleSpecs[w.slug] ? { ...sampleSpecs[w.slug], sampleFields: ['technique', 'dimensions'] as const } : {}),
+  ...w,
 });
 
 // [demo] titles are descriptive placeholders; the photos are real works by the owners.
@@ -102,7 +106,8 @@ export const fallbackArtists: ArtistProfile[] = [
     biography: 'Soy biotecnóloga y estoy por empezar mi doctorado en ciencias biológicas. De mi mamá heredé la pasión por el arte. Pintar es mi cable a tierra y es la forma más linda que tengo de expresarme.' },
 ];
 
-export const fallbackNews: News[] = [];
+// [demo] sample posts, clearly tagged on the page (src/data/sample.ts).
+export const fallbackNews: News[] = sampleNews;
 
 /** Source files of the local works, for build-time palette sampling (paths from the project root). */
 export const fallbackImageFiles: Record<string, string> = {

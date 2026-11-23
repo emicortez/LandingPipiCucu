@@ -72,3 +72,7 @@ Pedido: titular más chico, Colecciones más linda y un efecto "WAAAU" (Impeccab
 ## Ronda 4 — objetos de taller (2026-11-23)
 
 Atril en la ficha, paleta de pintor con los colores reales de cada obra y pinceladas en links y títulos (dibujados a línea, SVG propio). E2E 83/83, detector 0, capturas revisadas en 1440 y 390.
+
+## Ronda 5 — contenido de muestra y revisión móvil (2026-11-23)
+
+Contenido de muestra etiquetado (ver SAMPLE_CONTENT.md); las novedades de muestra son `noindex`, quedan fuera del sitemap y no emiten `Article`. E2E 83/83 tras corregir un overflow de 4 px a 320 (portadas inclinadas de novedades). Capturas de las 10 rutas a 390 px revisadas a ojo: sin superposiciones ni cortes.

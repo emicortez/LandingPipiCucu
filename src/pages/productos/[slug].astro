@@ -6,6 +6,7 @@ import Print from '../../components/ui/Print.astro';
 import HandNote from '../../components/ui/HandNote.astro';
 import Easel from '../../components/artwork/Easel.astro';
 import PaintPalette from '../../components/artwork/PaintPalette.astro';
+import SampleTag from '../../components/ui/SampleTag.astro';
 import { tiltFor } from '../../lib/tilt';
 import WorkTile from '../../components/artwork/WorkTile.astro';
 import Icon from '../../components/ui/Icon.astro';
@@ -29,8 +30,8 @@ const consultText = `Hola, quería consultar por la obra "${work.title}".`;
 const whatsapp = whatsappHref(settings.whatsappNumber, consultText);
 const specs = [
   { term: 'Categoría', value: work.category?.name },
-  { term: 'Técnica', value: work.technique },
-  { term: 'Medidas', value: work.dimensions },
+  { term: 'Técnica', value: work.technique, sample: work.sampleFields?.includes('technique') },
+  { term: 'Medidas', value: work.dimensions, sample: work.sampleFields?.includes('dimensions') },
 ].filter((s) => s.value);
 
 const crumbs: Crumb[] = [
@@ -72,7 +73,7 @@ const description = work.seo.description || work.shortDescription || `${work.tit
         )}
         {specs.length > 0 && (
           <dl class="specs">
-            {specs.map((s) => <div><dt>{s.term}</dt><dd>{s.value}</dd></div>)}
+            {specs.map((s) => <div><dt>{s.term}</dt><dd>{s.value}{'sample' in s && s.sample && <SampleTag />}</dd></div>)}
           </dl>
         )}
         {paragraphs(work.description).length > 0 && (

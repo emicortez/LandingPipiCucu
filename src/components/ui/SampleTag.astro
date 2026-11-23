@@ -1,0 +1,18 @@
+---
+/**
+ * Visible marker for placeholder content written for the site, not confirmed by the owners.
+ * Every use is listed in SAMPLE_CONTENT.md. Remove the data, and the tag goes with it.
+ */
+interface Props { class?: string; }
+const { class: className } = Astro.props;
+---
+<span class:list={['sample-tag', className]} title="Contenido de muestra: falta completarlo con datos reales">muestra</span>
+
+<style>
+  .sample-tag {
+    display: inline-block; vertical-align: middle; margin-inline: 0.4rem;
+    padding: 0.05rem 0.45rem; border: 1px dashed var(--color-rose-700); border-radius: 2px;
+    font-family: var(--font-sans); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.02em;
+    line-height: 1.4; color: var(--color-rose-700); background: var(--paper); rotate: -2deg;
+  }
+</style>

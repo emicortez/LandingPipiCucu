@@ -6,6 +6,8 @@ import { tiltFor } from '../lib/tilt';
 import Icon from '../components/ui/Icon.astro';
 import { getArtworks, getHome, getSettings } from '../lib/content';
 import { customOrders } from '../data/fallback';
+import { customOrdersFaq } from '../data/sample';
+import SampleTag from '../components/ui/SampleTag.astro';
 import { breadcrumbList, type Crumb } from '../lib/seo/jsonld';
 import { whatsappHref } from '../lib/urls';
 
@@ -58,6 +60,20 @@ const site = (Astro.site ?? new URL('http://localhost:4321')).href;
     </div>
   </section>
 
+  <section class="band faq" aria-labelledby="faq-title">
+    <div class="wrap faq-grid">
+      <h2 id="faq-title" class="t-2">Preguntas frecuentes</h2>
+      <div class="faq-list">
+        {customOrdersFaq.map((item, i) => (
+          <details class="paper taped faq-item" style={`rotate: ${[-0.8, 0.6, -0.4, 0.9][i % 4]}deg`}>
+            <summary>{item.q}</summary>
+            <p>{item.a}{item.sample && <SampleTag />}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
   {examples.length > 0 && (
     <section class="band" aria-labelledby="examples-title">
       <div class="wrap">
@@ -78,6 +94,15 @@ const site = (Astro.site ?? new URL('http://localhost:4321')).href;
   .bullets { margin-top: 1.25rem; padding-left: 1.2rem; display: grid; gap: 0.5rem; font-size: var(--step-1); }
   .bullets li::marker { color: var(--color-rose-700); }
   .examples { list-style: none; display: grid; gap: 3rem 2rem; }
+  .faq-grid { display: grid; gap: 2.5rem; }
+  .faq-list { display: grid; gap: 1.5rem; }
+  .faq-item { padding: 0; }
+  .faq-item summary { display: flex; justify-content: space-between; align-items: center; gap: 1rem; min-height: 3.5rem; padding: 1.1rem 1.5rem; cursor: pointer; list-style: none; font-family: var(--font-display); font-size: var(--step-1); }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after { content: "+"; flex: none; font-family: var(--font-sans); font-size: 1.5rem; line-height: 1; color: var(--color-rose-700); transition: rotate var(--dur) var(--ease-out); }
+  .faq-item[open] summary::after { rotate: 45deg; }
+  .faq-item summary:focus-visible { outline: 2px solid var(--focus); outline-offset: -4px; }
+  .faq-item p { padding: 0 1.5rem 1.4rem; color: var(--text-muted); max-width: 40rem; }
   @media (min-width: 40rem) { .examples { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   @media (min-width: 64rem) {
     .process-grid { grid-template-columns: 5fr 7fr; column-gap: 4rem; }
@@ -85,5 +110,6 @@ const site = (Astro.site ?? new URL('http://localhost:4321')).href;
     .process li { grid-template-columns: 1fr; }
     .process li::before { grid-row: auto; margin-bottom: 1rem; }
     .details-grid { grid-template-columns: 1fr 1fr; column-gap: 4rem; }
+    .faq-grid { grid-template-columns: 4fr 8fr; column-gap: 4rem; align-items: start; }
   }
 </style>

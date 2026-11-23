@@ -1,41 +1,35 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageIntro from '../../components/layout/PageIntro.astro';
-import ArtworkImage from '../../components/ui/ArtworkImage.astro';
+import NewsCard from '../../components/news/NewsCard.astro';
 import Icon from '../../components/ui/Icon.astro';
 import { getNews, getSettings } from '../../lib/content';
-import { formatDate } from '../../lib/format';
+import { tiltFor } from '../../lib/tilt';
 import { breadcrumbList, type Crumb } from '../../lib/seo/jsonld';
 
 const [news, settings] = await Promise.all([getNews(), getSettings()]);
 const crumbs: Crumb[] = [{ name: 'Inicio', path: '/' }, { name: 'Novedades', path: '/novedades/' }];
 const site = (Astro.site ?? new URL('http://localhost:4321')).href;
+const [lead, ...rest] = news;
 ---
 <BaseLayout
   title="Novedades del taller"
   description="Obras nuevas, anuncios y novedades de Pipí Cucú, taller de pintura decorativa en Buena Esperanza, San Luis."
-  headerTone="brand"
-  noindex={news.length === 0}
+  noindex={!news.some((n) => !n.sample)}
   jsonLd={[breadcrumbList(crumbs, site)]}
 >
   <PageIntro title="Novedades" lede="Obras nuevas, anuncios y lo que pasa en el taller." crumbs={crumbs} />
-  <section class="band" aria-label="Publicaciones">
+  <section class="band news-page" aria-label="Publicaciones">
     <div class="wrap">
-      {news.length > 0 ? (
-        <ul class="news-index">
-          {news.map((n) => (
-            <li>
-              <a class="news-row art-link" href={`/novedades/${n.slug}/`}>
-                {n.cover && <ArtworkImage image={n.cover} alt="" sizes="(min-width: 48rem) 22rem, 100vw" />}
-                <div class="news-text">
-                  <time datetime={n.publishedAt}>{formatDate(n.publishedAt)}</time>
-                  <h2 class="t-3 art-title">{n.title}</h2>
-                  <p class="muted">{n.excerpt}</p>
-                </div>
-              </a>
-            </li>
-          ))}
-        </ul>
+      {lead ? (
+        <>
+          <div class="news-lead"><NewsCard item={lead} tilt={-1.5} heading="h2" sizes="(min-width: 64rem) 46vw, 90vw" /></div>
+          {rest.length > 0 && (
+            <ul class="news-grid">
+              {rest.map((n, i) => <li><NewsCard item={n} tilt={tiltFor(i + 1)} heading="h2" /></li>)}
+            </ul>
+          )}
+        </>
       ) : (
         <div class="news-empty">
           <h2 class="t-2">Pronto vamos a publicar novedades acá</h2>
@@ -48,10 +42,17 @@ const site = (Astro.site ?? new URL('http://localhost:4321')).href;
 </BaseLayout>
 
 <style>
-  .news-index { list-style: none; display: grid; border-top: 1px solid var(--line); }
-  .news-row { display: grid; gap: 1.25rem; padding-block: 2rem; border-bottom: 1px solid var(--line); }
-  .news-text { display: grid; gap: 0.6rem; align-content: start; max-width: 40rem; }
-  .news-text time { font-size: var(--step--1); color: var(--text-muted); }
+  .news-page { padding-top: clamp(2rem, 4vw, 3rem); }
+  .news-lead { max-width: 52rem; }
+  .news-grid { list-style: none; display: grid; gap: 3.5rem 2.5rem; margin-top: clamp(3.5rem, 7vw, 6rem); }
   .news-empty { display: grid; gap: 1.25rem; justify-items: start; max-width: 36rem; }
-  @media (min-width: 48rem) { .news-row { grid-template-columns: 22rem 1fr; column-gap: 3rem; } }
+  @media (min-width: 48rem) {
+    .news-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+    .news-grid li:nth-child(even) { margin-top: 4rem; }
+  }
+  @media (min-width: 64rem) {
+    .news-lead :global(.art-link) { grid-template-columns: 1.2fr 1fr; column-gap: 3rem; align-items: end; }
+    .news-lead :global(.print), .news-lead :global(.news-blank) { grid-row: 1 / span 4; }
+    .news-grid { width: min(100%, 64rem); margin-left: auto; }
+  }
 </style>

@@ -1,0 +1,38 @@
+---
+/**
+ * A news post laid on the table: its cover as a taped print, or, without a cover, a paper
+ * card carrying the title in large type. Sample posts carry the "muestra" tag.
+ */
+import Print from '../ui/Print.astro';
+import SampleTag from '../ui/SampleTag.astro';
+import { formatDate } from '../../lib/format';
+import type { News } from '../../types/content';
+
+interface Props { item: News; tilt?: number; heading?: 'h2' | 'h3'; sizes?: string; }
+const { item, tilt = 0, heading = 'h3', sizes = '(min-width: 64rem) 28vw, 90vw' } = Astro.props;
+const Heading = heading;
+---
+<article class="news-card">
+  <a class="art-link" href={`/novedades/${item.slug}/`}>
+    {item.cover ? (
+      <Print image={item.cover} alt="" sizes={sizes} tilt={tilt} class="news-cover" />
+    ) : (
+      <div class="paper taped news-blank" style={`rotate: ${tilt}deg`} aria-hidden="true"><span>{item.title}</span></div>
+    )}
+    <p class="news-date"><time datetime={item.publishedAt}>{formatDate(item.publishedAt)}</time>{item.sample && <SampleTag />}</p>
+    <Heading class="art-title news-title">{item.title}</Heading>
+    <p class="muted news-excerpt">{item.excerpt}</p>
+  </a>
+</article>
+
+<style>
+  .news-card .art-link { display: grid; gap: 0.6rem; }
+  /* Tilted covers stay inside the column (a rotated full-width box overflows narrow screens). */
+  .news-card :global(.news-cover), .news-blank { width: 94%; justify-self: center; }
+  .news-card :global(.news-cover .art img) { aspect-ratio: 4 / 3; object-fit: contain; background: var(--surface-2); }
+  .news-blank { display: grid; place-items: center; aspect-ratio: 4 / 3; padding: 1.5rem; text-align: center; transition: translate var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out); }
+  .news-blank span { font-family: var(--font-display); font-size: var(--step-2); line-height: 1.1; color: var(--color-rose-700); }
+  .news-card .art-link:hover .news-blank { translate: 0 -4px; box-shadow: var(--shadow-lifted); }
+  .news-date { margin-top: 0.75rem; font-size: var(--step--1); color: var(--text-muted); }
+  .news-title { font-size: var(--step-2); }
+</style>
