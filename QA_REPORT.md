@@ -68,3 +68,7 @@ Defectos encontrados y corregidos en esta ronda: overflow de la nota de la ficha
 ## Ronda 3 — "La mesa viva" y Colecciones (2026-11-23)
 
 Pedido: titular más chico, Colecciones más linda y un efecto "WAAAU" (Impeccable `overdrive`, dirección elegida por la usuaria). E2E **83/83** (incluye 2 tests nuevos: arrastrar una foto 200 px no navega y un click la abre; cada foto de la mesa es un enlace con alt). Detector 0. LCP de laboratorio home 1,16 s móvil / 1,22 s desktop, CLS ≤ 0,05. Revisión de cierre: fix (flecha que no apuntaba a una foto; foto del gato tapada) → **ship**. Limitación: el arrastre y la inercia se verificaron por test y capturas, no en dispositivos reales.
+
+## Ronda 4 — objetos de taller (2026-11-23)
+
+Atril en la ficha, paleta de pintor con los colores reales de cada obra y pinceladas en links y títulos (dibujados a línea, SVG propio). E2E 83/83, detector 0, capturas revisadas en 1440 y 390.

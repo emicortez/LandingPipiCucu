@@ -140,7 +140,13 @@ input { caret-color: var(--accent); }
 .band--ink .muted { color: var(--text-inverse-muted); }
 
 .section-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 1rem 2rem; margin-bottom: clamp(2.5rem, 5vw, 4.5rem); }
-.section-head h2 { font-size: var(--step-4); }
+.section-head h2 { font-size: var(--step-4); position: relative; isolation: isolate; }
+/* A rose brush swash laid behind the foot of each section title. */
+.section-head h2::after {
+  content: ""; position: absolute; z-index: -1; left: -0.2em; bottom: 0.02em; width: min(72%, 9em); height: 0.34em;
+  background: var(--color-rose-300); mask: url("/brush-stroke.svg") center / 100% 100% no-repeat;
+}
+.band--deep .section-head h2::after { background: var(--color-rose-500); opacity: 0.45; }
 .t-display { font-size: var(--step-5); line-height: 0.98; letter-spacing: -0.025em; }
 .t-1 { font-size: var(--step-4); }
 .t-2 { font-size: var(--step-3); }
@@ -214,13 +220,17 @@ input { caret-color: var(--accent); }
 .on-ink .btn--line, .band--ink .btn--line { --btn-bg: transparent; --btn-fg: var(--color-ivory); --btn-border: rgb(248 244 241 / 0.4); }
 .on-ink .btn--line:hover, .band--ink .btn--line:hover { --btn-bg: var(--color-ivory); --btn-fg: var(--color-ink); }
 
+/* Links are underlined with a brush stroke (public/brush-stroke.svg as a mask). */
 .link {
-  display: inline-flex; align-items: center; gap: 0.45rem; min-height: 2.75rem;
+  position: relative; display: inline-flex; align-items: center; gap: 0.45rem; min-height: 2.75rem;
   font-weight: 500; text-decoration: none;
-  background: linear-gradient(currentColor, currentColor) 0 calc(100% - 0.55rem) / 100% 1px no-repeat;
-  transition: background-size var(--dur) var(--ease-out);
 }
-.link:hover { background-size: 0% 1px; background-position: 100% calc(100% - 0.55rem); }
+.link::after {
+  content: ""; position: absolute; left: -0.15rem; right: -0.15rem; bottom: 0.3rem; height: 0.5rem;
+  background: currentColor; mask: url("/brush-stroke.svg") center / 100% 100% no-repeat;
+  opacity: 0.85; transform-origin: left; transition: transform var(--dur) var(--ease-out);
+}
+.link:hover::after { transform: scaleX(0); transform-origin: right; }
 .link .icon { width: 1.05em; height: 1.05em; }
 .icon { width: 1.25rem; height: 1.25rem; flex: none; }
 
@@ -235,7 +245,7 @@ input { caret-color: var(--accent); }
 .brand-name span { font-size: var(--step--1); color: var(--text-muted); letter-spacing: 0.04em; }
 .nav-list { display: none; list-style: none; align-items: center; gap: clamp(1rem, 2vw, 2rem); }
 .nav-list a:not(.btn) { display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none; font-weight: 450; position: relative; }
-.nav-list a:not(.btn)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0.6rem; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform var(--dur) var(--ease-out); }
+.nav-list a:not(.btn)::after { content: ""; position: absolute; left: -0.1rem; right: -0.1rem; bottom: 0.45rem; height: 0.42rem; background: var(--color-rose-500); mask: url("/brush-stroke.svg") center / 100% 100% no-repeat; transform: scaleX(0); transform-origin: right; transition: transform var(--dur) var(--ease-out); }
 .nav-list a:not(.btn):hover::after, .nav-list a[aria-current="page"]::after { transform: scaleX(1); transform-origin: left; }
 .nav-list .btn { min-height: 2.75rem; padding-inline: 1.15rem; }
 .menu-button { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; padding: 0 1rem; border: 1px solid var(--line-strong); border-radius: 999px; background: transparent; cursor: pointer; font-weight: 500; }

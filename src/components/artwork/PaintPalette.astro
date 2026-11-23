@@ -1,0 +1,66 @@
+---
+/**
+ * A painter's palette drawn in line with a rose wash, carrying the work's own colours as
+ * paint blobs (sampled from its photograph at build time) and a brush dipped in the first
+ * one. Decorative: the colours are not information a visitor needs, so it is aria-hidden.
+ */
+interface Props { colors: string[]; class?: string; }
+const { colors, class: className } = Astro.props;
+// Blob centres along the rim, clear of the thumb hole; each blob turns a little.
+const spots = [
+  { x: 92, y: 52, r: -12 },
+  { x: 152, y: 34, r: 18 },
+  { x: 214, y: 40, r: -6 },
+  { x: 262, y: 78, r: 24 },
+  { x: 250, y: 134, r: -20 },
+];
+const blob = 'M-19,-3 C-20,-15 -7,-22 6,-20 C18,-18 23,-7 20,5 C18,14 8,20 -4,19 C-14,18 -18,9 -19,-3 Z';
+const shown = colors.slice(0, spots.length);
+---
+<svg class:list={['paint-palette', className]} viewBox="0 0 320 210" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <defs>
+    <clipPath id="palette-shape">
+      <path d="M38 118C22 62 88 14 170 16c86 3 138 52 132 108-5 46-52 78-108 74-30-2-40-24-24-40 14-14 4-32-16-30-30 3-34 34-56 50-26 20-54-10-64-60Z" />
+    </clipPath>
+  </defs>
+  <!-- the board: paper, a rose wash, and a few strokes of wood grain -->
+  <path class="pp-board" d="M38 118C22 62 88 14 170 16c86 3 138 52 132 108-5 46-52 78-108 74-30-2-40-24-24-40 14-14 4-32-16-30-30 3-34 34-56 50-26 20-54-10-64-60Z" />
+  <g clip-path="url(#palette-shape)" class="pp-grain">
+    <path d="M20 70c60-18 150-30 290-8" />
+    <path d="M30 104c80-14 170-16 280 4" />
+    <path d="M60 160c50-8 100-6 160 6" />
+  </g>
+  <path class="pp-outline" d="M38 118C22 62 88 14 170 16c86 3 138 52 132 108-5 46-52 78-108 74-30-2-40-24-24-40 14-14 4-32-16-30-30 3-34 34-56 50-26 20-54-10-64-60Z" />
+  <!-- thumb hole -->
+  <ellipse class="pp-hole" cx="108" cy="118" rx="17" ry="13" />
+
+  {shown.map((color, i) => (
+    <g transform={`translate(${spots[i].x} ${spots[i].y}) rotate(${spots[i].r})`}>
+      <path class="pp-blob" d={blob} style={`fill: ${color}`} />
+      <ellipse class="pp-shine" cx="-6" cy="-8" rx="6" ry="3" />
+    </g>
+  ))}
+
+  <!-- a brush resting across the board, tip loaded with the first colour -->
+  {shown[0] && (
+    <g transform="translate(96 196) rotate(-24)">
+      <path class="pp-handle" d="M2 -3.5Q-1 0 2 3.5L124 6.5L124 -6.5Z" />
+      <rect class="pp-ferrule" x="124" y="-7.5" width="26" height="15" rx="2" />
+      <path class="pp-tip" d="M150 -7C166 -8 180 -4 190 0C180 4 166 8 150 7Z" style={`fill: ${shown[0]}`} />
+    </g>
+  )}
+</svg>
+
+<style>
+  .paint-palette { width: 100%; height: auto; overflow: visible; }
+  .pp-board { fill: var(--paper); }
+  .pp-grain path { stroke: var(--color-rose-300); stroke-width: 1.2; opacity: 0.7; }
+  .pp-outline, .pp-hole, .pp-blob, .pp-handle, .pp-ferrule, .pp-tip { stroke: var(--color-ink); stroke-width: 1.4; }
+  .pp-outline { fill: var(--color-rose-200); fill-opacity: 0.35; }
+  .pp-hole { fill: var(--surface); }
+  .pp-blob { stroke-width: 1; stroke-opacity: 0.55; }
+  .pp-shine { fill: var(--paper); opacity: 0.45; }
+  .pp-handle { fill: var(--color-rose-700); }
+  .pp-ferrule { fill: var(--color-stone-light); }
+  .pp-tip { stroke-width: 1; }
+</style>

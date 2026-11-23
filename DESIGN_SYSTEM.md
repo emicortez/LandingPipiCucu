@@ -15,7 +15,9 @@ Elegido por la usuaria entre cuatro direcciones ("Taller cálido / collage"). Re
 | Print (foto encintada) | Hero, obras, catálogo, ficha, nosotras | `src/components/ui/Print.astro` |
 | Nota a mano + flecha | Hero, about, ficha, nosotras | `src/components/ui/HandNote.astro` (decorativa, `aria-hidden`) |
 | Tarjeta de papel con cinta | Definición del nombre, pasos de encargo, artistas | `.paper.taped` en `global.css` |
-| Chips de pintura | Ficha de obra | `src/lib/palette.ts` (colores muestreados en build del centro de la foto) |
+| Paleta de pintor | Ficha de obra | `src/components/artwork/PaintPalette.astro`: manchas con los colores reales de la obra (`src/lib/palette.ts`) y un pincel cargado con el primero |
+| Atril | Ficha de obra | `src/components/artwork/Easel.astro`: la foto apoyada en un atril dibujado a línea |
+| Pincelada | Links, títulos de sección, menú | `public/brush-stroke.svg` usado como máscara CSS |
 | Inclinaciones | Grillas | `src/lib/tilt.ts` (secuencia fija, nunca un patrón regular) |
 
 ## Color y contraste (WCAG, calculados)

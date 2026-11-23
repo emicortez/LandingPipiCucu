@@ -260,7 +260,7 @@ Text that needs a surface (definitions, the three ordering steps): paper white, 
 Reenie Beanie in rose-ink with a hand-drawn SVG arrow (down-right, down-left, right, left). Decorative and `aria-hidden`; one per screen.
 
 ### Paint chips
-On each work's page: up to five dominant colours sampled at build time from the centre of the photograph, laid as 3:4 swatches on a paper strip rotated -1° with print shadow, captioned by a hand note ("sus colores").
+On each work's page the print stands on a studio easel drawn in line (ink 1.4px non-scaling strokes, rose-200 wash, rose-300 ledge in front of the print's foot), and up to five dominant colours sampled at build time from the centre of the photograph sit as paint blobs on a drawn painter's palette (paper board, rose wash, rose grain lines, thumb hole in the table colour) with a brush whose tip carries the first colour, captioned by a hand note ("sus colores"). Links, section titles and the nav underline use one dry-brush stroke (public/brush-stroke.svg) as a CSS mask; section titles carry it as a rose swash behind their foot.
 
 ### Notice
 A small paper tag: paper white, 1px plum hairline, label size plum text.
