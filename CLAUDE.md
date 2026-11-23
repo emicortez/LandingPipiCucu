@@ -12,6 +12,7 @@
 - Contrato de datos: `src/types/content.ts`. Las páginas consumen solo `src/lib/content.ts`; Sanity solo se toca en `src/lib/sanity/`. Los nombres de campos GROQ deben coincidir con `studio/schemaTypes/`.
 - Imágenes: siempre `ArtworkImage` (dimensiones explícitas, AVIF/WebP, CDN de Sanity).
 - URLs editables: siempre por `safeExternalUrl` / `whatsappHref` (`src/lib/urls.ts`).
+- Mundo visual "Taller cálido": ver DESIGN.md (fuente de verdad). Obras siempre como `Print`, texto con superficie como `.paper.taped`, notas a mano con `HandNote` (máx. una por pantalla, decorativas). Una clase pasada a un componente hijo se estiliza con `:global()` desde el padre.
 - Estilos: tokens en `src/styles/global.css`. Clases de títulos `.t-*` (nunca `.h-*`: chocan con Tailwind).
 - Movimiento: GSAP solo en `src/scripts/motion/` y solo importado por el componente que lo usa. Solo `transform`/`opacity`/`clip-path`; respetar `prefers-reduced-motion`; nunca ocultar el titular del hero (es el LCP); contenido visible sin JS.
 - Sin React, sin nuevas dependencias sin justificarlas en ARCHITECTURE.md.

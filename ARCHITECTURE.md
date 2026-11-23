@@ -47,7 +47,7 @@ No se usa monorepo: el Studio tiene su propio `package.json`; el sitio no depend
 | `ArtworkImage` | Local → AVIF + WebP con `srcset`; Sanity → CDN con `auto=format`. Siempre `width`/`height` (CLS) y proporción original |
 | Sitemap propio (sin `@astrojs/sitemap`) | Usa las mismas reglas de indexación que las páginas (categorías vacías y novedades sin cuerpo quedan fuera) |
 | GSAP solo en componentes que lo usan | Astro empaqueta el script del componente únicamente en las páginas que lo incluyen |
-| Fuentes autoalojadas (`@fontsource-variable`) | Sin request a terceros, `font-display: swap`, preload de la display |
+| Fuentes autoalojadas (`@fontsource-variable`, `@fontsource/reenie-beanie` solo latín) | Sin request a terceros, `font-display: swap`, preload de la display |
 | Sin React ni islas | Los únicos comportamientos (menú, catálogo, visor, motion) son scripts chicos |
 | Analítica opcional (Plausible) | Sin cookies; eventos por `data-track`; no se envía el texto buscado |
 

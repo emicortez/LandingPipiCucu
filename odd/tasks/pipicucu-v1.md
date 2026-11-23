@@ -16,6 +16,7 @@ Branch: `feat/pipicucu-v1`. Delivery: ask-on-risk, work-unit commits. Test runne
 - S9 (brief §15-§16): security headers, safe rich text, validated external URLs; privacy-respecting analytics events (tienda, producto, WhatsApp, Instagram, filtros, búsqueda, personalizados).
 - S10 (brief §17): Playwright e2e + visual captures + axe; "No afirmar que una prueba se ejecutó si no fue ejecutada."
 - S11 (brief §20): docs `README.md`, `SPECIFICATIONS.md`, `ARCHITECTURE.md`, `DESIGN_SYSTEM.md`, `SEO_CHECKLIST.md`, `CMS_GUIDE.md`, `DEPLOYMENT.md`, `QA_REPORT.md`, `.env.example`, `CLAUDE.md`.
+- S12 (2026-11-23): "no es tan linda la pagina, usar impecable para mejorar los esitlos y las skills q tengas" — direction chosen: "Taller cálido / collage" ("fotos que se superponen como sobre una mesa de trabajo, rosa protagonista, detalles manuscritos y papel. Más color y calidez.").
 
 ## Tasks
 
@@ -27,6 +28,7 @@ Branch: `feat/pipicucu-v1`. Delivery: ask-on-risk, work-unit commits. Test runne
 - T6 (S7, S9): SEO (meta, JSON-LD, sitemap, robots, noindex), headers, analytics hooks. Route: inline. Status: done (production validation pending). Commits: 6383e66, test commit.
 - T7 (S10): Playwright + axe tests, screenshots at 320/390/768/1024/1440/1920, fixes. Route: inline. Status: done (80/80 e2e, captures reviewed, lab vitals). 
 - T8 (S11): Documentation set. Route: inline. Status: done except `.env.example` (permission-protected; values in DEPLOYMENT.md).
+- T9 (S12): Replace the visual world with "Taller cálido / collage" following Impeccable new-work (pinned direction, code-led, no image generation); finish review + DESIGN.md. Route: inline (finish reviewer + documenter delegated per Impeccable). Status: done — reviewer verdict ship (scoped to scored fixes), DESIGN.md + .impeccable/design.json written, e2e 80/80.
 
 ## Log
 
@@ -36,3 +38,5 @@ Branch: `feat/pipicucu-v1`. Delivery: ask-on-risk, work-unit commits. Test runne
 - L4 decision: typography moves from Playfair Display + DM Sans to Bodoni Moda (didone, matches the logo's PC letterforms) + Jost (geometric, matches the logo's "PIPÍ CUCÚ / Pintura decorativa" lettering), self-hosted. Reverting is a two-token change. Palette rose aligned to the logo background `#F3DCDF`.
 - L5 (2026-11-20) verification: astro check 0/0; build 16 pages; e2e 80/80 (Edge, desktop + Pixel 7) incl. axe WCAG 2.2 AA no serious/critical; lab LCP home mobile 4136 ms → 980 ms after removing headline/mobile-photo from the entrance. Bugs fixed: Tailwind `h-*` class collision, PNG fallbacks, featured grid gaps, brand link name mismatch.
 - L6 next: owners to create Sanity project + load real catalog; vector logo; clean cat photo; confirm WhatsApp/domain; deploy to Cloudflare Pages; validate rich results; ESLint not configured.
+- L7 (2026-11-23): "no es tan linda la pagina, usar impecable para mejorar los esitlos y las skills q tengas"; answer: "Taller cálido / collage". Impeccable diagnosis: ivory ground + high-contrast serif = the most common AI-generated look; new world drenches the rose and removes ivory as ground.
+- L8 (2026-11-23): Impeccable finish review: recapture → fix (7) → fix (1 partial) → ship. Detector 0 after token alignment. Lab LCP home 976 ms mobile.

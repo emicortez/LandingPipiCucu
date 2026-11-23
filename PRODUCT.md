@@ -38,8 +38,9 @@ Obras pintadas a mano por una madre y una hija, piezas únicas y personalizadas 
 ## Brand Commitments
 
 - Monograma **PC.**, nombre **Pipí Cucú** y descriptor **Pintura decorativa**.
+- Mundo visual: "Taller cálido / collage" (elegido por la usuaria, 2026-11-23), ver DESIGN.md.
 - Paleta (V1, ajustada al logo original): rosa empolvado `#F3DCDF`, carbón `#252326`, marfil `#F8F4F1`, rosa profundo `#B66C82` (texto: `#8C4660`). Ver DESIGN_SYSTEM.md.
-- Tipografías (V1): Bodoni Moda para títulos (didone como el monograma) y Jost para interfaz y cuerpo. Antes: Playfair Display + DM Sans; volver es un cambio de dos tokens.
+- Tipografías (V1): Bodoni Moda para títulos (didone como el monograma), Jost para interfaz y cuerpo, Reenie Beanie solo para notas a mano. Antes: Playfair Display + DM Sans; volver es un cambio de dos tokens.
 - Flores y mariposas solo como guiños puntuales; nada de estética de plantilla o flyer.
 - Voz cercana y artística, español rioplatense.
 

@@ -50,3 +50,17 @@ Son mediciones locales sin CDN: orientativas, no reemplazan datos reales (CrUX /
 - "¿Qué quiere decir pipí cucú?", la foto de las fundadoras y los pasos de personalizados viven en `src/data/fallback.ts`, no en Sanity.
 - Assets a reemplazar: logo vectorial, foto limpia del gato, retrato de mayor resolución (ver SPECIFICATIONS.md).
 - ESLint no está configurado; la calidad estática se cubre hoy con `astro check` (TypeScript estricto).
+
+## Ronda 2 — rediseño "Taller cálido" (2026-11-23)
+
+| Chequeo | Resultado |
+| --- | --- |
+| `npm run check` | 0 errores, 0 warnings |
+| `npm run build` | 16 páginas |
+| E2E + axe | 80/80 en tres corridas seguidas; una corrida previa tuvo 1 falla transitoria que no se reprodujo (no se guardó el detalle) |
+| Impeccable `detect` | 0 hallazgos tras alinear 7 literales a tokens de DESIGN.md |
+| Impeccable `first-viewport` | OK en 390×844 y 1440×900 (tesis visible, acción dentro y respondiendo) |
+| Revisión de cierre Impeccable (revisor independiente, modo degradado) | recapture → fix (7 correcciones) → fix (1 parcial) → **ship**, con alcance sobre las correcciones puntuadas |
+| Vitals de laboratorio (móvil / desktop) | Home LCP 976 / 1056 ms · catálogo 1592 / 1808 ms · ficha 832 / 812 ms · CLS ≤ 0,039 |
+
+Defectos encontrados y corregidos en esta ronda: overflow de la nota de la ficha en 320/1024 px; estilos con scope de Astro que no alcanzaban a componentes hijos (notas, fotos de nosotras y novedades); colecciones sin material en reposo; racimo de obras con huecos; nota "Deby y Agos" pisando la foto; botones del hero que empujaban las obras fuera del primer viewport en móvil.
