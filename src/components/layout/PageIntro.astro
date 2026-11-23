@@ -5,7 +5,7 @@ import type { Crumb } from '../../lib/seo/jsonld';
 interface Props { title: string; lede?: string; crumbs?: Crumb[]; tone?: 'surface' | 'brand'; }
 const { title, lede, crumbs, tone = 'brand' } = Astro.props;
 ---
-<section class:list={['page-intro', tone === 'brand' && 'band--brand']} aria-labelledby="page-title">
+<section class="page-intro" aria-labelledby="page-title" data-tone={tone}>
   <div class="wrap">
     {crumbs && <Breadcrumbs crumbs={crumbs} />}
     <h1 id="page-title" class="t-1">{title}</h1>

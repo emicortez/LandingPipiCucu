@@ -1,12 +1,15 @@
 ---
-import ArtworkImage from '../ui/ArtworkImage.astro';
+import Print from '../ui/Print.astro';
+import HandNote from '../ui/HandNote.astro';
 import Icon from '../ui/Icon.astro';
 import type { Artwork, HomePage, SiteSettings } from '../../types/content';
 
-interface Props { home: HomePage; settings: SiteSettings; work?: Artwork; }
-const { home, settings, work } = Astro.props;
+interface Props { home: HomePage; settings: SiteSettings; works: Artwork[]; }
+const { home, settings, works } = Astro.props;
+// The table: the hero work largest, two more prints overlapping its lower corners.
+const [main, left, right] = works;
 ---
-<section class="hero band--brand" aria-labelledby="hero-title">
+<section class="hero" aria-labelledby="hero-title">
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <h1 id="hero-title" class="t-display">{home.heroTitle}</h1>
@@ -16,39 +19,59 @@ const { home, settings, work } = Astro.props;
         <a class="btn btn--line" href={settings.storeUrl} rel="noopener" target="_blank" data-track="store_click" data-track-label="hero">Tienda online <Icon name="arrow-up-right" /><span class="sr-only">(se abre en otra pestaña)</span></a>
       </div>
     </div>
-    {work && (
-      <a class="hero-art art-link" href={`/productos/${work.slug}/`} data-track="artwork_click" data-track-label={`hero:${work.slug}`}>
-        <ArtworkImage image={work.images[0]} sizes="(min-width: 64rem) 40vw, 100vw" priority data-hero-art />
-        <span class="hero-work" data-hero-fade>{work.title} <Icon name="arrow-right" /></span>
-      </a>
+
+    {main && (
+      <div class="table">
+        <a class="art-link slot slot--main" href={`/productos/${main.slug}/`} data-track="artwork_click" data-track-label={`hero:${main.slug}`}>
+          <Print image={main.images[0]} sizes="(min-width: 64rem) 26vw, 58vw" tilt={-1.8} priority data-lay />
+        </a>
+        {left && (
+          <a class="art-link slot slot--left" href={`/productos/${left.slug}/`} data-track="artwork_click" data-track-label={`hero:${left.slug}`}>
+            <Print image={left.images[0]} sizes="(min-width: 64rem) 15vw, 36vw" tilt={-3} tape="corner" data-lay />
+          </a>
+        )}
+        {right && (
+          <a class="art-link slot slot--right" href={`/productos/${right.slug}/`} data-track="artwork_click" data-track-label={`hero:${right.slug}`}>
+            <Print image={right.images[0]} sizes="(min-width: 64rem) 16vw, 38vw" tilt={2.6} data-lay />
+          </a>
+        )}
+        <HandNote class="table-note" text="pintado a mano" arrow="down-right" />
+      </div>
     )}
   </div>
 </section>
 
 <style>
-  .hero { padding-block: clamp(2rem, 4vw, 3.5rem) clamp(3rem, 6vw, 5rem); min-height: calc(100svh - var(--header-h)); display: flex; align-items: center; }
-  .hero-grid { display: grid; gap: 2.5rem; align-items: center; }
-  .hero-copy { display: grid; gap: clamp(1.25rem, 2.5vw, 2rem); }
-  .hero-copy h1 { max-width: 15ch; }
-  .hero-lede { max-width: 30rem; color: var(--color-ink); }
-  .hero-art { display: grid; justify-items: center; gap: 0.9rem; text-decoration: none; }
-  .hero-art :global(.art) { overflow: hidden; }
-  .hero-art :global(img) { width: auto; max-width: 100%; max-height: min(72svh, 52rem); }
-  .hero-work { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; font-size: var(--step--1); font-weight: 500; }
-  .hero-work :global(.icon) { width: 1rem; height: 1rem; transition: transform var(--dur) var(--ease-out); }
-  .hero-art:hover .hero-work :global(.icon) { transform: translateX(3px); }
+  .hero { padding-block: clamp(1.5rem, 3vw, 2.5rem) clamp(3.5rem, 7vw, 6rem); min-height: calc(100svh - var(--header-h)); display: flex; align-items: center; }
+  .hero-grid { display: grid; gap: clamp(3rem, 8vw, 4rem); align-items: center; width: 100%; }
+  .hero-copy { display: grid; gap: clamp(1.25rem, 2.5vw, 2rem); position: relative; z-index: 3; }
+  .hero-copy h1 { max-width: 14ch; }
+  .hero-lede { max-width: 38rem; color: var(--color-ink); }
+
+  /* The table: prints positioned as fractions of a fixed-ratio area, so they keep their
+     overlap at every width. Each print keeps its own aspect ratio. */
+  .table { position: relative; aspect-ratio: 1 / 1.02; width: 100%; max-width: 40rem; justify-self: center; }
+  .slot { position: absolute; }
+  .slot--main { left: 20%; top: 4%; width: 58%; z-index: 2; }
+  .slot--left { left: 0; bottom: 3%; width: 36%; z-index: 3; }
+  .slot--right { right: 0; bottom: 0; width: 38%; z-index: 1; }
+  .table :global(.table-note) { position: absolute; left: -2%; top: 6%; z-index: 4; }
+
   @media (max-width: 39.99rem) {
-    .hero-copy .actions { display: grid; }
-    .hero-art :global(img) { max-height: 64svh; }
+    .hero-grid { gap: 2.5rem; }
+    .hero-copy .actions .btn { padding-inline: 1.1rem; }
+    .table { aspect-ratio: 1 / 1.12; }
+    .table :global(.table-note) { left: -1%; top: -1rem; }
   }
   @media (min-width: 64rem) {
     .hero-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 2rem; }
-    .hero-copy { grid-column: 1 / span 7; }
-    .hero-art { grid-column: 8 / span 5; }
+    .hero-copy { grid-column: 1 / span 6; }
+    .table { grid-column: 7 / span 6; max-width: none; }
+    .table :global(.table-note) { left: -4%; top: 2%; }
   }
 </style>
 
 <script>
-  import { playHeroEntrance } from '../../scripts/motion/hero';
-  playHeroEntrance();
+  import { layTheTable } from '../../scripts/motion/hero';
+  layTheTable();
 </script>

@@ -13,7 +13,12 @@ const [settings, home, works, categories, news] = await Promise.all([getSettings
 
 // Hero: the chosen work, else the first featured one, else the first in the catalog.
 const heroWork = works.find((w) => w.slug === home.heroArtworkSlug) ?? works.find((w) => w.featured) ?? works[0];
-const featured = pickFeatured(works.filter((w) => w !== heroWork), home.featuredArtworkSlugs, 4);
+const others = works.filter((w) => w !== heroWork);
+// Two more prints share the hero table with the chosen work.
+const tableWorks = [heroWork, ...pickFeatured(others, home.featuredArtworkSlugs, 2)].filter((w) => w !== undefined);
+// "Obras del taller" avoids repeating the table's prints when the catalog is big enough.
+const fresh = others.filter((w) => !tableWorks.includes(w));
+const featured = pickFeatured(fresh.length >= 3 ? fresh : others, home.featuredArtworkSlugs, 4);
 
 const shownCategories = home.featuredCategorySlugs.length
   ? home.featuredCategorySlugs.map((s) => categories.find((c) => c.slug === s)).filter((c) => c !== undefined)
@@ -23,8 +28,8 @@ const collectionItems = shownCategories.map((category) => {
   return { category, count: inCategory.length, image: category.cover ?? inCategory[0]?.images[0] };
 });
 ---
-<BaseLayout headerTone="brand" image={heroWork?.images[0]}>
-  <Hero home={home} settings={settings} work={heroWork} />
+<BaseLayout image={heroWork?.images[0]}>
+  <Hero home={home} settings={settings} works={tableWorks} />
   <FeaturedWorks works={featured} />
   <Collections items={collectionItems} />
   <About home={home} />

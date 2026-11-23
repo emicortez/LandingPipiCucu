@@ -1,0 +1,24 @@
+---
+/**
+ * A photograph of a work lying on the workshop table: paper border, washi tape and a
+ * slight tilt. The work is always whole inside it (ArtworkImage never crops).
+ */
+import ArtworkImage from './ArtworkImage.astro';
+import type { ArtImage } from '../../types/content';
+
+interface Props {
+  image: ArtImage;
+  sizes: string;
+  /** Rotation in degrees; keep within ±3 so works never read as skewed. */
+  tilt?: number;
+  tape?: 'top' | 'corner';
+  priority?: boolean;
+  alt?: string;
+  class?: string;
+  [key: `data-${string}`]: unknown;
+}
+const { image, sizes, tilt = 0, tape = 'top', priority = false, alt, class: className, ...rest } = Astro.props;
+---
+<figure class:list={['print', tape === 'corner' && 'print--corner', className]} style={`--tilt: ${tilt}deg`} {...rest}>
+  <ArtworkImage image={image} sizes={sizes} priority={priority} alt={alt} />
+</figure>

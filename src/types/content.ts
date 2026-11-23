@@ -53,6 +53,8 @@ export interface Artwork {
   externalStoreUrl?: string;
   customOrderAvailable: boolean;
   seo: Seo;
+  /** Paint chips sampled at build time from the centre of the first photo (src/lib/palette.ts). */
+  palette?: string[];
 }
 
 /** Portable Text subset rendered by RichText.astro (no raw HTML is ever rendered). */

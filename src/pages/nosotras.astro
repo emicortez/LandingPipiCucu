@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ArtworkImage from '../components/ui/ArtworkImage.astro';
+import Print from '../components/ui/Print.astro';
+import HandNote from '../components/ui/HandNote.astro';
 import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
 import Icon from '../components/ui/Icon.astro';
 import { getArtists, getSettings } from '../lib/content';
@@ -19,22 +20,21 @@ const site = (Astro.site ?? new URL('http://localhost:4321')).href;
   headerTone="brand"
   jsonLd={[breadcrumbList(crumbs, site)]}
 >
-  <section class="band--brand story-intro" aria-labelledby="page-title">
+  <section class="story-intro" aria-labelledby="page-title">
     <div class="wrap story-grid">
       <div class="story-copy">
         <Breadcrumbs crumbs={crumbs} />
         <h1 id="page-title" class="t-display">Madre e hija, un mismo taller.</h1>
         <p class="lede">Somos Deborah y Agostina. Creamos cuadros y objetos pintados a mano en {settings.location}.</p>
       </div>
-      <ArtworkImage class="story-photo" image={foundersPhoto} sizes="(min-width: 64rem) 26vw, 70vw" priority />
+      <Print class="story-photo" image={foundersPhoto} sizes="(min-width: 64rem) 26vw, 70vw" tilt={2.4} priority />
     </div>
   </section>
 
   <section class="band definition" aria-labelledby="definition-title">
-    <div class="wrap definition-grid">
-      <h2 id="definition-title" class="t-1">{nameDefinition.term}</h2>
-      <div>
-        <p class="muted">{nameDefinition.note}</p>
+    <div class="wrap">
+      <div class="paper taped definition-card">
+        <h2 id="definition-title" class="t-1 entry">{nameDefinition.term} <span class="entry-note">{nameDefinition.note}</span></h2>
         <ol class="senses">
           {nameDefinition.senses.map((s) => <li>{s}</li>)}
         </ol>
@@ -43,13 +43,16 @@ const site = (Astro.site ?? new URL('http://localhost:4321')).href;
     </div>
   </section>
 
-  <section class="band band--tint artists" aria-labelledby="artists-title">
+  <section class="band band--deep artists" aria-labelledby="artists-title">
     <div class="wrap">
-      <h2 id="artists-title" class="t-1 artists-title">Quiénes pintan</h2>
+      <div class="artists-head">
+        <h2 id="artists-title" class="t-1">Quiénes pintan</h2>
+        <HandNote text="mamá e hija" arrow="down-left" class="artists-note" />
+      </div>
       <div class="artist-list">
         {artists.map((a) => (
-          <article class="artist" aria-labelledby={`artist-${a.id}`}>
-            {a.photo && <ArtworkImage class="artist-photo" image={a.photo} sizes="(min-width: 64rem) 20vw, 60vw" />}
+          <article class="artist paper taped" aria-labelledby={`artist-${a.id}`}>
+            {a.photo && <Print class="artist-photo" image={a.photo} sizes="(min-width: 64rem) 20vw, 60vw" tilt={-1.5} />}
             <h3 id={`artist-${a.id}`} class="t-2">{a.name}</h3>
             <p class="artist-role">{a.role}</p>
             <div class="artist-bio">{paragraphs(a.biography).map((p) => <p>{p}</p>)}</div>
@@ -76,23 +79,26 @@ const site = (Astro.site ?? new URL('http://localhost:4321')).href;
   .story-copy { display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); align-content: start; }
   .story-copy h1 { margin-top: clamp(1rem, 3vw, 2.5rem); max-width: 10ch; }
   .story-copy .lede { color: var(--color-ink); max-width: 30rem; }
-  .story-photo { width: min(100%, 20rem); }
-  .definition-grid { display: grid; gap: 2rem; }
+  .story-grid :global(.story-photo) { width: min(100%, 20rem); }
+  .definition-card { rotate: -0.8deg; max-width: 52rem; margin-inline: auto; }
+  .entry { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 1rem; }
+  .entry-note { font-family: var(--font-sans); font-size: var(--step-0); font-weight: 400; color: var(--text-muted); letter-spacing: 0; }
+  .artists-head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.5rem 1.5rem; margin-bottom: clamp(3rem, 6vw, 4.5rem); }
+  .artist:nth-child(odd) { rotate: -1deg; }
+  .artist:nth-child(even) { rotate: 0.8deg; }
   .senses { margin-top: 1rem; padding-left: 1.5rem; display: grid; gap: 1.25rem; font-family: var(--font-display); font-size: var(--step-2); line-height: 1.3; max-width: 34ch; }
   .senses li::marker { font-size: 0.7em; color: var(--color-rose-700); }
   .example { margin-top: 2rem; color: var(--text-muted); font-size: var(--step-1); max-width: 34rem; }
-  .artists-title { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
   .artist-list { display: grid; gap: 4rem; }
   .artist { display: grid; gap: 1rem; align-content: start; max-width: 34rem; }
-  .artist-photo { width: min(100%, 16rem); }
+  .artist :global(.artist-photo) { width: min(100%, 16rem); }
   .artist-role { color: var(--text-muted); }
   .artist-bio { display: grid; gap: 1em; font-size: var(--step-1); line-height: 1.55; }
   .next { display: grid; gap: 2rem; }
   @media (min-width: 64rem) {
     .story-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 2rem; align-items: end; }
     .story-copy { grid-column: 1 / span 7; align-self: center; }
-    .story-photo { grid-column: 9 / span 3; width: 100%; }
-    .definition-grid { grid-template-columns: 5fr 7fr; column-gap: 4rem; }
+    .story-grid :global(.story-photo) { grid-column: 9 / span 3; width: 100%; }
     .artist-list { grid-template-columns: 1fr 1fr; column-gap: 4rem; }
     .artist:nth-child(even) { margin-top: 8rem; }
     .next { grid-template-columns: 1fr auto; align-items: center; }

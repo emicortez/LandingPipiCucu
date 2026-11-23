@@ -7,8 +7,9 @@ import type { ArtImage, Artwork, ArtistProfile, Category, HomePage, News, SiteSe
 import { sanity } from './sanity/client';
 import { artistsQuery, artworksQuery, categoriesQuery, homeQuery, newsQuery, settingsQuery } from './sanity/queries';
 import {
-  fallbackArtists, fallbackArtworks, fallbackCategories, fallbackHome, fallbackNews, fallbackSettings,
+  fallbackArtists, fallbackArtworks, fallbackCategories, fallbackHome, fallbackImageFiles, fallbackNews, fallbackSettings,
 } from '../data/fallback';
+import { samplePalette } from './palette';
 import { STORE_HOST, safeExternalUrl } from './urls';
 
 export const usingDemo = !sanity;
@@ -65,9 +66,28 @@ export async function getHome(): Promise<HomePage> {
   };
 }
 
-export async function getArtworks(): Promise<Artwork[]> {
+let artworksPromise: Promise<Artwork[]> | undefined;
+export function getArtworks(): Promise<Artwork[]> {
+  artworksPromise ??= loadArtworks();
+  return artworksPromise;
+}
+
+/** Palette is decoration: a failed sample leaves the chips out, it never fails the build. */
+async function paletteFor(work: Artwork): Promise<string[]> {
+  const first = work.images[0];
+  const source = typeof first?.src === 'string' ? first.src : fallbackImageFiles[work.slug];
+  if (!source) return [];
+  try {
+    return await samplePalette(source);
+  } catch (err) {
+    console.warn(`palette skipped for ${work.slug}:`, err);
+    return [];
+  }
+}
+
+async function loadArtworks(): Promise<Artwork[]> {
   const raw = await load<Artwork[]>('artworks', artworksQuery, fallbackArtworks);
-  return raw
+  const works = raw
     .map((a) => ({
       ...a,
       images: (a.images ?? []).map(realImage).filter((i): i is ArtImage => Boolean(i)),
@@ -75,6 +95,7 @@ export async function getArtworks(): Promise<Artwork[]> {
       seo: { ...a.seo, image: realImage(a.seo?.image) },
     }))
     .filter((a) => a.images.length > 0);
+  return Promise.all(works.map(async (w) => ({ ...w, palette: await paletteFor(w) })));
 }
 
 export async function getCategories(): Promise<Category[]> {

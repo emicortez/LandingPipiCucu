@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageIntro from '../components/layout/PageIntro.astro';
 import WorkTile from '../components/artwork/WorkTile.astro';
+import { tiltFor } from '../lib/tilt';
 import Icon from '../components/ui/Icon.astro';
 import { getArtworks, getHome, getSettings } from '../lib/content';
 import { customOrders } from '../data/fallback';
@@ -44,7 +45,7 @@ const site = (Astro.site ?? new URL('http://localhost:4321')).href;
     </div>
   </section>
 
-  <section class="band band--tint" aria-labelledby="details-title">
+  <section class="band band--deep" aria-labelledby="details-title">
     <div class="wrap details-grid">
       <div>
         <h2 id="details-title" class="t-2">Qué conviene contarnos</h2>
@@ -61,7 +62,7 @@ const site = (Astro.site ?? new URL('http://localhost:4321')).href;
     <section class="band" aria-labelledby="examples-title">
       <div class="wrap">
         <div class="section-head"><h2 id="examples-title" class="t-2">Algunas obras del taller</h2></div>
-        <ul class="examples">{examples.map((w) => <li><WorkTile work={w} sizes="(min-width: 64rem) 30vw, 100vw" /></li>)}</ul>
+        <ul class="examples">{examples.map((w, i) => <li><WorkTile work={w} sizes="(min-width: 64rem) 30vw, 100vw" tilt={tiltFor(i)} /></li>)}</ul>
       </div>
     </section>
   )}

@@ -2,6 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
 import ArtworkImage from '../../components/ui/ArtworkImage.astro';
+import Print from '../../components/ui/Print.astro';
+import HandNote from '../../components/ui/HandNote.astro';
+import { tiltFor } from '../../lib/tilt';
 import WorkTile from '../../components/artwork/WorkTile.astro';
 import Icon from '../../components/ui/Icon.astro';
 import { getArtworks, getCategories, getSettings, storeLinkFor, usingDemo } from '../../lib/content';
@@ -42,12 +45,12 @@ const description = work.seo.description || work.shortDescription || `${work.tit
     <div class="wrap ficha-grid">
       <div class="ficha-media">
         <button type="button" class="ficha-zoom" data-lightbox-open aria-haspopup="dialog" aria-label={`Ver ${work.title} en grande`}>
-          <ArtworkImage image={work.images[0]} sizes="(min-width: 64rem) 55vw, 100vw" priority />
+          <Print image={work.images[0]} sizes="(min-width: 64rem) 50vw, 100vw" tilt={-1.2} priority />
         </button>
         {work.images.length > 1 && (
           <ul class="ficha-thumbs" aria-label="Más fotos de la obra">
-            {work.images.slice(1).map((img) => (
-              <li><ArtworkImage image={img} sizes="(min-width: 64rem) 18vw, 45vw" /></li>
+            {work.images.slice(1).map((img, i) => (
+              <li><Print image={img} sizes="(min-width: 64rem) 18vw, 45vw" tilt={tiltFor(i + 1)} /></li>
             ))}
           </ul>
         )}
@@ -57,6 +60,12 @@ const description = work.seo.description || work.shortDescription || `${work.tit
         <Breadcrumbs crumbs={crumbs} />
         <h1 class="t-1">{work.title}</h1>
         {work.shortDescription && <p class="lede">{work.shortDescription}</p>}
+        {work.palette && work.palette.length > 0 && (
+          <div class="chips" aria-hidden="true">
+            <HandNote text="sus colores" arrow="down-left" class="chips-note" />
+            <ul>{work.palette.map((c) => <li style={`--chip: ${c}`}></li>)}</ul>
+          </div>
+        )}
         {specs.length > 0 && (
           <dl class="specs">
             {specs.map((s) => <div><dt>{s.term}</dt><dd>{s.value}</dd></div>)}
@@ -92,11 +101,11 @@ const description = work.seo.description || work.shortDescription || `${work.tit
   </article>
 
   {related.length > 0 && (
-    <section class="band band--tint" aria-labelledby="related-title">
+    <section class="band band--deep" aria-labelledby="related-title">
       <div class="wrap">
         <div class="section-head"><h2 id="related-title" class="t-2">Otras obras de {work.category?.name.toLocaleLowerCase('es')}</h2></div>
         <ul class="related">
-          {related.map((w) => <li><WorkTile work={w} sizes="(min-width: 64rem) 30vw, 100vw" /></li>)}
+          {related.map((w, i) => <li><WorkTile work={w} sizes="(min-width: 64rem) 30vw, 100vw" tilt={tiltFor(i + 2)} /></li>)}
         </ul>
       </div>
     </section>
@@ -107,8 +116,15 @@ const description = work.seo.description || work.shortDescription || `${work.tit
   .ficha { padding-block: clamp(1.5rem, 3vw, 2.5rem) var(--section); }
   .ficha-grid { display: grid; gap: clamp(2rem, 5vw, 4rem); }
   .ficha-media { display: grid; gap: 1rem; align-content: start; }
-  .ficha-zoom { display: grid; place-items: center; padding: clamp(1rem, 4vw, 3.5rem); border: 0; background: var(--color-rose-50); cursor: zoom-in; }
-  .ficha-zoom :global(img) { width: auto; max-width: 100%; max-height: 78svh; }
+  .ficha-zoom { display: grid; place-items: center; padding: clamp(1rem, 3vw, 2.5rem); border: 0; background: none; cursor: zoom-in; }
+  .ficha-zoom:hover :global(.print) { transform: rotate(0deg) translateY(-4px); box-shadow: var(--shadow-lifted); }
+  .ficha-zoom :global(.print) { width: fit-content; max-width: 100%; }
+  .ficha-zoom :global(img) { width: auto; max-width: 100%; max-height: 74svh; }
+  /* Paint chips sampled from the photograph: swatches on a strip of paper. */
+  .chips { display: grid; gap: 0.5rem; }
+  .chips :global(.chips-note) { max-width: 100%; }
+  .chips ul { list-style: none; display: flex; gap: 0.5rem; padding: 0.6rem; background: var(--paper); box-shadow: var(--shadow-print); width: fit-content; rotate: -1deg; }
+  .chips li { width: clamp(2.5rem, 6vw, 3.25rem); aspect-ratio: 3 / 4; background: var(--chip); border-radius: 2px; box-shadow: inset 0 0 0 1px rgb(37 35 38 / 0.08); }
   .ficha-thumbs { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
   .ficha-info { display: grid; gap: 1.5rem; align-content: start; }
   .ficha-info h1 { max-width: 14ch; }

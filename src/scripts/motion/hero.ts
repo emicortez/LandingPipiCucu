@@ -1,17 +1,14 @@
 /**
- * Signature moment: the hero work is "raised" into view the way the owners photograph their
- * paintings — lifted up against the sky — and the actions settle after it. The headline is the
- * LCP element, so it is never hidden or delayed: it paints with the first frame.
- * Runs once on load. Content is visible by default; html.motion-pending (set in the head,
- * removed after 2.5 s at the latest) is the only thing that hides the animated parts.
+ * Signature moment: on load the prints are laid on the table one by one — dropped from a
+ * little height with extra rotation, settling with an exponential ease — then the actions
+ * appear. Prints animate only from 64rem, where the headline is the LCP element; the
+ * headline is never hidden. Content is visible by default; html.motion-pending (set in the
+ * head, removed after 2.5 s at the latest) is the only thing that hides the animated parts.
  */
 import { gsap } from 'gsap';
 
-export function playHeroEntrance(): void {
+export function layTheTable(): void {
   const root = document.documentElement;
-  // On narrow screens the photo is the LCP element, so it is shown at once there.
-  const art = matchMedia('(min-width: 64rem)').matches ? document.querySelector<HTMLElement>('[data-hero-art]') : null;
-  const fades = gsap.utils.toArray<HTMLElement>('[data-hero-fade]');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Reduced motion, or the safety timeout already revealed everything: never replay.
@@ -20,14 +17,23 @@ export function playHeroEntrance(): void {
     return;
   }
 
-  const img = art?.querySelector('img');
-  const tl = gsap.timeline({
-    defaults: { ease: 'expo.out' },
-    onComplete: () => gsap.set([art, img, ...fades].filter(Boolean), { clearProps: 'all' }),
+  const wide = matchMedia('(min-width: 64rem)').matches;
+  const prints = wide ? gsap.utils.toArray<HTMLElement>('[data-lay]') : [];
+  const fades = gsap.utils.toArray<HTMLElement>('[data-hero-fade]');
+  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+
+  // GSAP reads each print's CSS tilt from its transform, adds a little extra rotation and
+  // height, and hands the transform back to CSS (clearProps) once the print has settled.
+  prints.forEach((print, i) => {
+    const extra = i % 2 === 0 ? -7 : 6;
+    tl.fromTo(
+      print,
+      { autoAlpha: 0, y: -46, scale: 1.08, rotation: `+=${extra}` },
+      { autoAlpha: 1, y: 0, scale: 1, rotation: `-=${extra}`, duration: 1.05, clearProps: 'transform,opacity,visibility' },
+      0.08 + i * 0.16,
+    );
   });
-  if (art) tl.fromTo(art, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.3, ease: 'expo.inOut' }, 0);
-  if (img) tl.fromTo(img, { scale: 1.14, yPercent: 10 }, { scale: 1, yPercent: 0, duration: 1.7 }, 0.05);
-  if (fades.length) tl.fromTo(fades, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.08 }, 0.35);
+  if (fades.length) tl.fromTo(fades, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.08, clearProps: 'all' }, 0.15);
 
   // The timeline has rendered its first frame; the CSS guard can go.
   root.classList.remove('motion-pending');

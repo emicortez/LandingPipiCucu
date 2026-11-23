@@ -56,7 +56,7 @@ const thin = item.content.length === 0;
   .post { padding-block: clamp(1rem, 2vw, 1.5rem) var(--section); }
   .post-head { display: grid; gap: 1.25rem; max-width: 60rem; margin-bottom: 3rem; }
   .post-head time { color: var(--text-muted); font-size: var(--step--1); margin-top: 1.5rem; }
-  .post-cover { max-width: 60rem; margin-bottom: 3rem; }
+  .post :global(.post-cover) { max-width: 60rem; margin-bottom: 3rem; }
   .post-body { font-size: var(--step-1); line-height: 1.65; }
   .post-link, .post-back { margin-top: 2.5rem; }
 </style>

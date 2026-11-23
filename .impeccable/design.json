@@ -1,0 +1,400 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-23T06:42:37.086Z",
+  "title": "Design System: Pipí Cucú",
+  "extensions": {
+    "colorMeta": {
+      "rose-table": {
+        "role": "primary",
+        "displayName": "Powder Rose Table",
+        "tonalRamp": [
+          "#2c2122",
+          "#503a3c",
+          "#765156",
+          "#9d686e",
+          "#b48d92",
+          "#cbb4b7",
+          "#dfd3d4",
+          "#f4f0f1"
+        ]
+      },
+      "rose-ink": {
+        "role": "primary",
+        "displayName": "Deep Rose Ink",
+        "tonalRamp": [
+          "#2e1e24",
+          "#563440",
+          "#80475c",
+          "#aa5a78",
+          "#be8399",
+          "#d1aebb",
+          "#e2cfd6",
+          "#f5f0f2"
+        ]
+      },
+      "rose-deep": {
+        "role": "secondary",
+        "displayName": "Second-Surface Rose",
+        "tonalRamp": [
+          "#321a1f",
+          "#5e2b36",
+          "#8d394b",
+          "#be475f",
+          "#cc7587",
+          "#d9a5b0",
+          "#e7cbd1",
+          "#f6eef0"
+        ]
+      },
+      "rose-display": {
+        "role": "secondary",
+        "displayName": "Dusty Display Rose",
+        "tonalRamp": [
+          "#2e1e23",
+          "#56343e",
+          "#804758",
+          "#ab5a72",
+          "#be8395",
+          "#d1aeb8",
+          "#e2cfd5",
+          "#f5f0f1"
+        ]
+      },
+      "rose-tape": {
+        "role": "secondary",
+        "displayName": "Washi Rose",
+        "tonalRamp": [
+          "#311b21",
+          "#5c2e39",
+          "#893e50",
+          "#b74d66",
+          "#c77a8c",
+          "#d6a8b3",
+          "#e5ccd2",
+          "#f6eff0"
+        ]
+      },
+      "charcoal": {
+        "role": "neutral",
+        "displayName": "Charcoal Ink",
+        "tonalRamp": [
+          "#272527",
+          "#464347",
+          "#656067",
+          "#847d87",
+          "#a29da4",
+          "#c0bdc1",
+          "#d9d8da",
+          "#f2f2f3"
+        ]
+      },
+      "charcoal-soft": {
+        "role": "neutral",
+        "displayName": "Soft Charcoal",
+        "tonalRamp": [
+          "#272527",
+          "#474347",
+          "#666066",
+          "#867e86",
+          "#a49ea4",
+          "#c1bdc1",
+          "#dad8da",
+          "#f3f2f3"
+        ]
+      },
+      "plum": {
+        "role": "neutral",
+        "displayName": "Rose Plum",
+        "tonalRamp": [
+          "#2b2125",
+          "#4f3a41",
+          "#75525e",
+          "#9a6a7a",
+          "#b28f9b",
+          "#cab5bc",
+          "#ded3d7",
+          "#f4f1f2"
+        ]
+      },
+      "rose-paper": {
+        "role": "neutral",
+        "displayName": "Paper White",
+        "tonalRamp": [
+          "#2c2521",
+          "#50423a",
+          "#765f51",
+          "#9d7b68",
+          "#b49c8d",
+          "#cbbcb4",
+          "#dfd7d3",
+          "#f4f2f0"
+        ]
+      },
+      "ivory": {
+        "role": "neutral",
+        "displayName": "Ivory",
+        "tonalRamp": [
+          "#2c2521",
+          "#50433a",
+          "#766151",
+          "#9d7e68",
+          "#b49e8d",
+          "#cbbeb4",
+          "#dfd8d3",
+          "#f4f2f0"
+        ]
+      },
+      "stone-light": {
+        "role": "neutral",
+        "displayName": "Light Stone",
+        "tonalRamp": [
+          "#282426",
+          "#494143",
+          "#6a5d61",
+          "#8b797e",
+          "#a79a9e",
+          "#c3bbbe",
+          "#dbd7d8",
+          "#f3f2f2"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Home hero headline only, max 14ch."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section heads and page H1s."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card and step headings, prose H2."
+      },
+      "art-title": {
+        "displayName": "Art Title",
+        "purpose": "The work's name under each print."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "One-paragraph introductions, usually plum."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Reading text; prose max 38rem."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Categories, counts, breadcrumbs, footer heads; sentence case."
+      },
+      "hand": {
+        "displayName": "Hand",
+        "purpose": "Decorative pencil annotations only, one per screen, rotated about -4deg."
+      }
+    },
+    "shadows": [
+      {
+        "name": "print",
+        "value": "0 1px 2px rgb(74 40 52 / 0.12), 0 14px 28px -12px rgb(92 48 64 / 0.38)",
+        "purpose": "Prints, paper cards and paint-chip strips at rest."
+      },
+      {
+        "name": "lifted",
+        "value": "0 2px 4px rgb(74 40 52 / 0.12), 0 26px 44px -16px rgb(92 48 64 / 0.45)",
+        "purpose": "A print on hover or focus."
+      },
+      {
+        "name": "header-scrolled",
+        "value": "0 1px 0 rgb(107 71 83 / 0.22), 0 10px 24px -20px rgb(92 48 64 / 0.5)",
+        "purpose": "Sticky header after scroll."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Default easing for state changes, reveals and print lift."
+      },
+      {
+        "name": "dur-fast",
+        "value": "180ms",
+        "purpose": "Colour, border and press transitions."
+      },
+      {
+        "name": "dur",
+        "value": "380ms",
+        "purpose": "Underline, icon and reveal transitions."
+      },
+      {
+        "name": "print-lift",
+        "value": "520ms",
+        "purpose": "Print straightens and lifts on hover/focus."
+      },
+      {
+        "name": "lay-the-table",
+        "value": "expo.out, 1.05s per print, 0.16s stagger, from y -46px, scale 1.08, extra rotation 6-7deg",
+        "purpose": "Hero prints laid on the table on load, 64rem and up only; headline never hidden; off under reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "40rem"
+      },
+      {
+        "name": "md",
+        "value": "48rem"
+      },
+      {
+        "name": "lg",
+        "value": "64rem"
+      },
+      {
+        "name": "xl",
+        "value": "90rem"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main action pill: charcoal, turns deep rose on hover.",
+      "html": "<a class=\"ds-btn\" href=\"#\">Ver el catálogo <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></a>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;gap:.6rem;min-height:3rem;padding:.7rem 1.5rem;border:1px solid #252326;border-radius:999px;background:#252326;color:#f8f4f1;font-family:'Jost Variable',Jost,Futura,system-ui,sans-serif;font-weight:500;font-size:1rem;letter-spacing:.01em;text-decoration:none;transition:background-color 180ms,border-color 180ms,transform 180ms cubic-bezier(.22,1,.36,1)}.ds-btn svg{transition:transform 380ms cubic-bezier(.22,1,.36,1)}.ds-btn:hover{background:#8c4660;border-color:#8c4660}.ds-btn:hover svg{transform:translateX(3px)}.ds-btn:active{transform:scale(.98)}.ds-btn:focus-visible{outline:2px solid #8c4660;outline-offset:3px}"
+    },
+    {
+      "name": "Line Button",
+      "kind": "button",
+      "refersTo": "button-line",
+      "description": "Secondary pill with a charcoal hairline; fills charcoal on hover.",
+      "html": "<a class=\"ds-btn-line\" href=\"#\">Tienda online <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7 17 17 7M8 7h9v9\"/></svg></a>",
+      "css": ".ds-btn-line{display:inline-flex;align-items:center;gap:.6rem;min-height:3rem;padding:.7rem 1.5rem;border:1px solid rgb(37 35 38 / .38);border-radius:999px;background:transparent;color:#252326;font-family:'Jost Variable',Jost,Futura,system-ui,sans-serif;font-weight:500;font-size:1rem;text-decoration:none;transition:background-color 180ms,color 180ms,border-color 180ms}.ds-btn-line svg{transition:transform 380ms cubic-bezier(.22,1,.36,1)}.ds-btn-line:hover{background:#252326;color:#f8f4f1;border-color:#252326}.ds-btn-line:hover svg{transform:translate(2px,-2px)}.ds-btn-line:focus-visible{outline:2px solid #8c4660;outline-offset:3px}"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip-filter",
+      "description": "Catalog category toggle; selected state fills charcoal.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">Todas</button><button class=\"ds-chip\" aria-pressed=\"false\">Cuadros</button></div>",
+      "css": ".ds-chips{display:flex;gap:.5rem}.ds-chip{min-height:2.75rem;padding:.5rem 1.1rem;border-radius:999px;border:1px solid rgb(37 35 38 / .38);background:transparent;color:#252326;font-family:'Jost Variable',Jost,Futura,system-ui,sans-serif;font-weight:500;cursor:pointer;transition:background-color 180ms,color 180ms,border-color 180ms}.ds-chip:hover{border-color:#252326}.ds-chip[aria-pressed=true]{background:#252326;color:#f8f4f1;border-color:#252326}.ds-chip:focus-visible{outline:2px solid #8c4660;outline-offset:3px}"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Paper-white pill field with inline icon.",
+      "html": "<label class=\"ds-field\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m20 20-3.5-3.5\"/></svg><input type=\"search\" placeholder=\"Buscar por nombre\"></label>",
+      "css": ".ds-field{display:flex;align-items:center;gap:.6rem;min-height:3rem;padding:0 1rem;border:1px solid rgb(37 35 38 / .38);border-radius:999px;background:#fbf6f3;color:#252326;font-family:'Jost Variable',Jost,Futura,system-ui,sans-serif}.ds-field input{flex:1;min-width:0;border:0;background:transparent;outline:none;font:inherit;caret-color:#8c4660}.ds-field input::placeholder{color:#6b4753}.ds-field:focus-within{border-color:#252326;outline:2px solid #8c4660;outline-offset:2px}"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": "nav",
+      "description": "Sticky table-coloured header with growing hairline links and a primary pill.",
+      "html": "<nav class=\"ds-nav\"><strong class=\"ds-nav-brand\">Pipí Cucú</strong><a href=\"#\" aria-current=\"page\">Obras</a><a href=\"#\">Nosotras</a><a href=\"#\">Personalizados</a><a class=\"ds-nav-cta\" href=\"#\">Tienda</a></nav>",
+      "css": ".ds-nav{display:flex;align-items:center;gap:1.75rem;min-height:4.5rem;padding:0 1.5rem;background:#f3dcdf;color:#252326;font-family:'Jost Variable',Jost,Futura,system-ui,sans-serif}.ds-nav-brand{font-family:'Bodoni Moda Variable','Bodoni 72',Didot,Georgia,serif;font-weight:500;font-size:1.2rem;margin-right:auto}.ds-nav a{position:relative;display:inline-flex;align-items:center;min-height:2.75rem;color:inherit;text-decoration:none;font-weight:450}.ds-nav a:not(.ds-nav-cta)::after{content:'';position:absolute;left:0;right:0;bottom:.6rem;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform 380ms cubic-bezier(.22,1,.36,1)}.ds-nav a:not(.ds-nav-cta):hover::after,.ds-nav a[aria-current=page]::after{transform:scaleX(1);transform-origin:left}.ds-nav a.ds-nav-cta{padding:0 1.15rem;border-radius:999px;background:#252326;color:#f8f4f1;font-weight:500;transition:background-color 180ms}.ds-nav a.ds-nav-cta:hover{background:#8c4660}.ds-nav a:focus-visible{outline:2px solid #8c4660;outline-offset:3px}"
+    },
+    {
+      "name": "Print",
+      "kind": "card",
+      "refersTo": "print",
+      "description": "Signature: a work as a taped, tilted paper print that straightens and lifts on hover/focus.",
+      "html": "<a class=\"ds-print-link\" href=\"#\"><figure class=\"ds-print\" style=\"--tilt:-1.8deg\"><div class=\"ds-print-art\"></div></figure><span class=\"ds-print-title\">Lugar que permanece</span></a>",
+      "css": ".ds-print-link{display:inline-block;width:14rem;padding:1.5rem;color:#252326;text-decoration:none}.ds-print{position:relative;margin:0;padding:.6rem .6rem .96rem;background:#fbf6f3;box-shadow:0 1px 2px rgb(74 40 52 / .12),0 14px 28px -12px rgb(92 48 64 / .38);transform:rotate(var(--tilt));transition:transform 520ms cubic-bezier(.22,1,.36,1),box-shadow 520ms cubic-bezier(.22,1,.36,1)}.ds-print::before{content:'';position:absolute;z-index:2;top:-.85rem;left:50%;width:30%;height:1.7rem;translate:-50% 0;rotate:calc(var(--tilt) * -1.6 - 2deg);background:repeating-linear-gradient(90deg,rgb(255 255 255 / .16) 0 2px,transparent 2px 7px),rgb(226 180 191 / .78)}.ds-print-art{aspect-ratio:4/5;background:linear-gradient(160deg,#9d686e,#cbb4b7 55%,#6b4753)}.ds-print-title{display:block;margin-top:1.1rem;font-family:'Bodoni Moda Variable','Bodoni 72',Didot,Georgia,serif;font-weight:500;font-size:1.3rem;line-height:1.2}.ds-print-link:hover .ds-print,.ds-print-link:focus-visible .ds-print{transform:rotate(0) translateY(-6px) scale(1.015);box-shadow:0 2px 4px rgb(74 40 52 / .12),0 26px 44px -16px rgb(92 48 64 / .45)}.ds-print-link:focus-visible{outline:none}.ds-print-link:focus-visible .ds-print{outline:2px solid #8c4660;outline-offset:4px}"
+    },
+    {
+      "name": "Paper Card",
+      "kind": "card",
+      "refersTo": "paper-card",
+      "description": "Paper note for text that needs a surface, with a Bodoni step numeral.",
+      "html": "<div class=\"ds-paper\"><span class=\"ds-paper-n\">1</span><div><h3>Nos contás tu idea</h3><p>Por la tienda o por mensaje privado.</p></div></div>",
+      "css": ".ds-paper{display:grid;grid-template-columns:3rem 1fr;column-gap:1rem;max-width:24rem;padding:1.5rem 1.5rem 1.6rem;background:#fbf6f3;color:#252326;box-shadow:0 1px 2px rgb(74 40 52 / .12),0 14px 28px -12px rgb(92 48 64 / .38);rotate:-1.4deg;font-family:'Jost Variable',Jost,Futura,system-ui,sans-serif}.ds-paper-n{font-family:'Bodoni Moda Variable','Bodoni 72',Didot,Georgia,serif;font-size:2.4rem;line-height:.9;color:#8c4660}.ds-paper h3{margin:0;font-family:'Bodoni Moda Variable','Bodoni 72',Didot,Georgia,serif;font-weight:500;font-size:1.6rem;line-height:1.04}.ds-paper p{margin:.35rem 0 0;color:#6b4753}"
+    },
+    {
+      "name": "Hand Note",
+      "kind": "custom",
+      "refersTo": "hand",
+      "description": "Decorative pencil annotation with a hand-drawn arrow; one per screen.",
+      "html": "<span class=\"ds-hand\" aria-hidden=\"true\"><span>pintado a mano</span><svg width=\"72\" height=\"72\" viewBox=\"0 0 70 70\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 6c14 2 30 9 40 22s14 24 14 34\"/><path d=\"M49 54l9 10 6-13\"/></svg></span>",
+      "css": ".ds-hand{display:inline-flex;align-items:flex-start;gap:.25rem;color:#8c4660}.ds-hand span{font-family:'Reenie Beanie','Segoe Print',cursive;font-size:2rem;line-height:1;transform:rotate(-4deg);white-space:nowrap}.ds-hand svg{margin-top:.9rem}"
+    },
+    {
+      "name": "Paint Chips",
+      "kind": "custom",
+      "refersTo": "paint-chips",
+      "description": "A work's own colours, sampled from its photograph, on a tilted paper strip.",
+      "html": "<ul class=\"ds-chipstrip\"><li style=\"--c:#7a9bb5\"></li><li style=\"--c:#d9c3a5\"></li><li style=\"--c:#5d6b4a\"></li><li style=\"--c:#c98a7a\"></li></ul>",
+      "css": ".ds-chipstrip{list-style:none;display:flex;gap:.5rem;margin:0;padding:.6rem;width:fit-content;background:#fbf6f3;box-shadow:0 1px 2px rgb(74 40 52 / .12),0 14px 28px -12px rgb(92 48 64 / .38);rotate:-1deg}.ds-chipstrip li{width:3rem;aspect-ratio:3/4;background:var(--c);border-radius:2px;box-shadow:inset 0 0 0 1px rgb(37 35 38 / .08)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Workshop Table",
+    "overview": "The site is the table in Deby and Agos's workshop. Powder rose, the logo's own field, is the surface on every page, carrying a faint fractal-noise paper tooth so it reads as a material rather than a flat fill. Real photographs of the works lie on it as prints: an off-white paper border, a soft rose-tinted shadow, a strip of translucent washi tape, and a slight hand-laid tilt that straightens when touched. Text that needs a surface sits on paper cards; a pencil hand annotates sparingly. One charcoal band closes each page.\n\nThe mood is warm, artisanal and affectionate, but composed: a Didone display face (Bodoni Moda, echoing the PC. monogram) set large against a geometric sans (Jost) keeps the collage from tipping into scrapbook. Density is generous; prints overlap each other but never the text. Works are always shown whole, never cropped, whatever their shape (round, portrait, landscape).\n\nThe confirmed rejection is the category default: a cream page with a serif headline beside one product photo and a row of equal cards.",
+    "keyCharacteristics": [
+      "Drenched powder-rose table on every page; deeper rose marks second surfaces.",
+      "Works presented as taped, tilted paper prints (tilt within ±3°).",
+      "Paper cards for text that needs a surface; rotated slightly, like notes laid by hand.",
+      "At most one handwritten annotation with a drawn arrow per screen, always decorative.",
+      "One charcoal band (footer, or a dark section) closes the page.",
+      "Each work's page shows its own paint chips sampled from its photograph."
+    ],
+    "rules": [
+      {
+        "name": "The Table Is Rose Rule",
+        "body": "Every page sits on rose-table. Never introduce a white or cream page background; white exists only as paper lying on the table.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Dark Band Rule",
+        "body": "Charcoal fills at most one closing band per page (plus the menu overlay). It is the full stop, not a section rhythm.",
+        "section": "colors"
+      },
+      {
+        "name": "The Large-Only Rose Rule",
+        "body": "rose-display never carries text below large-display size; rose-ink drops to large-text-only on rose-deep.",
+        "section": "colors"
+      },
+      {
+        "name": "The Hand Annotates Rule",
+        "body": "Handwriting never carries information the page doesn't already state in real text; it is `aria-hidden`, one per screen, paired with a drawn arrow pointing at something.",
+        "section": "typography"
+      },
+      {
+        "name": "The Balanced Head Rule",
+        "body": "Headings use `text-wrap: balance` and paragraphs `text-wrap: pretty`; heads are capped in `ch`, not left to run.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tinted Shadow Rule",
+        "body": "Shadows are rose-brown (rgb 74 40 52 / 92 48 64), never neutral grey or black, and never hard-offset.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Lift On Touch Rule",
+        "body": "Only objects on the table lift. Lifting is the hover/focus response; the tape stays put while the print straightens.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do set every page on rose-table (#f3dcdf) with the paper-tooth noise; use rose-deep for second surfaces.",
+      "Do present works as prints: paper border, rose-tinted shadow, washi tape, tilt within ±3°, the whole work visible.",
+      "Do take grid tilts from the fixed uneven sequence so collections look laid by hand.",
+      "Do keep handwriting to one annotation per screen, decorative, with its message already in real text.",
+      "Do close each page with one charcoal band and switch buttons to their on-ink variants there.",
+      "Do keep body text charcoal and secondary text plum; reserve rose-display for large display accents.",
+      "Do animate only transform, opacity and shadow, and disable motion under `prefers-reduced-motion`."
+    ],
+    "donts": [
+      "Don't use a white or cream page background, or the category default of a serif headline beside one product photo and a row of equal cards.",
+      "Don't crop a work to fit a frame, or rotate a print beyond ±3°.",
+      "Don't let prints overlap text.",
+      "Don't use grey or black shadows, or hard offset shadows.",
+      "Don't set text below large size in rose-display, or rose-ink below large size on rose-deep.",
+      "Don't use uppercase labels or eyebrow lines above headings.",
+      "Don't hide the hero headline during the entrance animation."
+    ]
+  }
+}

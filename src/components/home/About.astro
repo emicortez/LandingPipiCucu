@@ -1,5 +1,6 @@
 ---
-import ArtworkImage from '../ui/ArtworkImage.astro';
+import Print from '../ui/Print.astro';
+import HandNote from '../ui/HandNote.astro';
 import Icon from '../ui/Icon.astro';
 import { foundersPhoto, nameDefinition } from '../../data/fallback';
 import type { HomePage } from '../../types/content';
@@ -9,36 +10,44 @@ const { home } = Astro.props;
 ---
 <section class="band about" aria-labelledby="about-title">
   <div class="wrap about-grid">
-    <div class="about-name">
-      <h2 id="about-title" class="about-term">¿Qué quiere decir <span class="term">{nameDefinition.term}</span>?</h2>
-      <p class="about-note muted">{nameDefinition.note}</p>
-      <p class="about-definition" data-word-reveal>{nameDefinition.senses[0]}</p>
+    <div class="about-photo">
+      <Print image={foundersPhoto} sizes="(min-width: 64rem) 24vw, 70vw" tilt={2.2} />
+      <HandNote class="about-note" text="Deby y Agos" arrow="down-right" />
     </div>
-    <ArtworkImage class="about-photo" image={foundersPhoto} sizes="(min-width: 64rem) 22vw, 60vw" />
-    <div class="about-copy">
-      <h3 class="t-3">{home.aboutPreview.title}</h3>
-      <p class="lede">{home.aboutPreview.text}</p>
-      <a class="link" href="/nosotras/">Conocé nuestra historia <Icon name="arrow-right" /></a>
+    <div class="about-text">
+      <h2 id="about-title" class="t-3">¿Qué quiere decir pipí cucú?</h2>
+      <div class="paper taped definition">
+        <p class="term"><span>{nameDefinition.term}</span> <span class="note">{nameDefinition.note}</span></p>
+        <p class="sense" data-word-reveal>{nameDefinition.senses[0]}</p>
+      </div>
+      <div class="about-copy">
+        <h3 class="t-3">{home.aboutPreview.title}</h3>
+        <p class="lede">{home.aboutPreview.text}</p>
+        <a class="link" href="/nosotras/">Conocé nuestra historia <Icon name="arrow-right" /></a>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  .about-grid { display: grid; gap: clamp(2rem, 5vw, 4rem); }
-  .about-term { font-size: var(--step-2); font-weight: 450; }
-  .term { font-style: normal; white-space: nowrap; }
-  .about-note { margin-top: 0.5rem; font-size: var(--step--1); }
-  .about-definition { margin-top: clamp(1.5rem, 3vw, 2.5rem); font-family: var(--font-display); font-size: var(--step-3); line-height: 1.18; letter-spacing: -0.015em; max-width: 24ch; }
-  .about-photo { width: min(100%, 18rem); }
-  .about-copy { display: grid; gap: 1.25rem; align-content: start; max-width: 30rem; }
+  .about-grid { display: grid; gap: clamp(3rem, 6vw, 4rem); }
+  .about-photo { position: relative; width: min(78%, 22rem); justify-self: center; order: 2; }
+  .about-photo { margin-top: 4rem; }
+  .about-photo :global(.about-note) { position: absolute; left: 4%; bottom: calc(100% - 1.5rem); }
+  .about-text { display: grid; gap: clamp(1.75rem, 3vw, 2.5rem); align-content: start; order: 1; }
+  .definition { --tilt: -1deg; rotate: -1deg; max-width: 40rem; }
+  .term { font-family: var(--font-display); font-size: var(--step-2); display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 0.75rem; }
+  .note { font-family: var(--font-sans); font-size: var(--step--1); color: var(--text-muted); }
+  .sense { margin-top: 1rem; font-family: var(--font-display); font-size: var(--step-2); line-height: 1.28; letter-spacing: -0.01em; }
+  .about-copy { display: grid; gap: 1rem; max-width: 32rem; }
+  .about-copy .lede { color: var(--color-ink); }
   @media (min-width: 64rem) {
-    .about-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 2rem; row-gap: 5rem; }
-    .about-name { grid-column: 1 / span 9; }
-    .about-photo { grid-column: 2 / span 3; width: 100%; }
-    .about-copy { grid-column: 7 / span 5; align-self: end; }
+    .about-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 2rem; align-items: center; }
+    .about-photo { order: 0; grid-column: 2 / span 4; width: 100%; }
+    .about-text { order: 0; grid-column: 7 / span 6; }
   }
-  /* Words start in brand rose (AA for large text) and settle into ink on scroll (word-reveal.ts). */
-  .about-definition :global(.w) { color: var(--color-rose-500); }
+  /* Words start in brand rose (AA for large text on paper) and settle into ink on scroll (word-reveal.ts). */
+  .sense :global(.w) { color: var(--color-rose-500); }
 </style>
 
 <script>

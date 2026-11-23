@@ -210,7 +210,7 @@ test.describe('navigation and accessibility', () => {
     await page.goto('/');
     await expect(page.locator('html')).not.toHaveClass(/motion-pending/, { timeout: 3000 });
     await page.waitForTimeout(2200);
-    const hidden = await page.locator('[data-hero-fade], [data-hero-art]').evaluateAll((els) => els.filter((e) => getComputedStyle(e).opacity !== '1' || getComputedStyle(e).visibility === 'hidden').length);
+    const hidden = await page.locator('[data-hero-fade], [data-lay]').evaluateAll((els) => els.filter((e) => getComputedStyle(e).opacity !== '1' || getComputedStyle(e).visibility === 'hidden').length);
     expect(hidden).toBe(0);
   });
 });

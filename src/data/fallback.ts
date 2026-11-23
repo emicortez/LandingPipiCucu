@@ -104,6 +104,15 @@ export const fallbackArtists: ArtistProfile[] = [
 
 export const fallbackNews: News[] = [];
 
+/** Source files of the local works, for build-time palette sampling (paths from the project root). */
+export const fallbackImageFiles: Record<string, string> = {
+  'mariposa-azul': 'src/assets/works/mariposa.webp',
+  'cuatro-ramos': 'src/assets/works/florales.webp',
+  'entre-amapolas': 'src/assets/works/amapolas.webp',
+  'fases-de-la-luna': 'src/assets/works/lunas.webp',
+  'retrato-de-gato': 'src/assets/works/gato.webp',
+};
+
 /** [empretienda] meaning of the brand name, from the store's "¿Quiénes somos?" page. */
 export const nameDefinition = {
   term: 'pipí cucú',

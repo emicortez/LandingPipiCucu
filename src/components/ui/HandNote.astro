@@ -1,0 +1,28 @@
+---
+/**
+ * A pencil-hand annotation with a drawn arrow. Decorative (aria-hidden): whatever it says
+ * must already be said in the page's real text. At most one per screen.
+ */
+interface Props { text: string; arrow?: 'down-right' | 'down-left' | 'right' | 'left'; class?: string; }
+const { text, arrow = 'down-right', class: className } = Astro.props;
+// Hand-drawn strokes: a loose curve with an open arrowhead, round caps.
+const arrows = {
+  'down-right': { d: 'M4 6c14 2 30 9 40 22s14 24 14 34', head: 'M49 54l9 10 6-13' },
+  'down-left': { d: 'M64 6c-14 2-30 9-40 22S10 52 10 62', head: 'M3 51l7 13 9-10' },
+  right: { d: 'M4 30c12-10 30-14 44-9s16 9 18 11', head: 'M55 22l11 10-13 5' },
+  left: { d: 'M66 30C54 20 36 16 22 21S6 30 4 32', head: 'M15 22 4 32l13 5' },
+};
+const a = arrows[arrow];
+---
+<span class:list={['hand-note', `hand-note--${arrow}`, className]} aria-hidden="true">
+  <span class="hand">{text}</span>
+  <svg class="hand-arrow" width="72" height="72" viewBox="0 0 70 70" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d={a.d} /><path d={a.head} /></svg>
+</span>
+
+<style>
+  .hand-note { display: inline-flex; align-items: flex-start; gap: 0.25rem; max-width: 100%; color: var(--color-rose-700); pointer-events: none; }
+  .hand-note--down-right { flex-direction: row; }
+  .hand-note--down-left { flex-direction: row-reverse; }
+  .hand-note .hand { transform: rotate(-4deg); white-space: nowrap; }
+  .hand-note svg { margin-top: 0.9rem; flex: none; }
+</style>

@@ -5,6 +5,7 @@
  */
 import WorkTile from '../artwork/WorkTile.astro';
 import Icon from '../ui/Icon.astro';
+import { tiltFor } from '../../lib/tilt';
 import type { Artwork, CategoryRef } from '../../types/content';
 
 interface Props { works: Artwork[]; categories: CategoryRef[]; initialCategory?: string; }
@@ -40,7 +41,7 @@ const normalize = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLo
   <ul class="catalog-grid" data-grid>
     {works.map((work, i) => (
       <li data-item data-category={work.category?.slug ?? ''} data-name={normalize(work.title)} data-order={i}>
-        <WorkTile work={work} sizes="(min-width: 64rem) 30vw, (min-width: 40rem) 45vw, 100vw" class="tile--framed" />
+        <WorkTile work={work} sizes="(min-width: 64rem) 30vw, (min-width: 40rem) 45vw, 100vw" tilt={tiltFor(i)} />
       </li>
     ))}
   </ul>
@@ -63,7 +64,7 @@ const normalize = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLo
   .chip:hover { border-color: var(--color-ink); }
   .chip[aria-pressed="true"] { background: var(--color-ink); color: var(--color-ivory); border-color: var(--color-ink); }
   .tool-row { display: grid; gap: 0.75rem; }
-  .field { display: flex; align-items: center; gap: 0.6rem; min-height: 3rem; padding: 0 1rem; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--color-ivory); }
+  .field { display: flex; align-items: center; gap: 0.6rem; min-height: 3rem; padding: 0 1rem; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--paper); }
   .field:focus-within { border-color: var(--color-ink); outline: 2px solid var(--focus); outline-offset: 2px; }
   .field input, .field select { flex: 1; min-width: 0; min-height: 2.75rem; border: 0; background: transparent; outline: none; }
   .field input::placeholder { color: var(--text-muted); }
@@ -79,10 +80,9 @@ const normalize = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLo
   }
   @media (min-width: 64rem) { .catalog-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
-  /* Framed tiles: every work whole inside the same 4:5 wall space, hung on a common baseline. */
-  .catalog-grid :global(.tile--framed .art) { aspect-ratio: 4 / 5; background: var(--color-rose-50); }
-  .catalog-grid :global(.tile--framed .art picture), .catalog-grid :global(.tile--framed .art img) { width: 100%; height: 100%; }
-  .catalog-grid :global(.tile--framed .art img) { object-fit: contain; object-position: center bottom; }
+  /* Prints keep their own proportions; tall works are capped so rows stay readable. */
+  .catalog-grid { align-items: start; }
+  .catalog-grid :global(.print img) { max-height: 70svh; width: auto; margin-inline: auto; }
 </style>
 
 <script>
